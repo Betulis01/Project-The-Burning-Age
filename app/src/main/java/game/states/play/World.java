@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import engine.core.Game;
+import engine.input.KeyboardInput;
 import engine.map.TiledMap;
 import engine.map.TiledMapLoader;
 import engine.physics.Collision;
@@ -19,6 +20,7 @@ import game.states.PlayState;
 import game.states.play.ui.InteractButton;
 import game.tiles.Tile;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 
 public class World extends PlayState {
     private final List<Entity> entities = new ArrayList<>();
@@ -27,6 +29,7 @@ public class World extends PlayState {
     private final List<Interactable> interactables = new ArrayList<>();
     private final Player player;
     private final Orc orc;
+    private final InteractButton interactButton;
     private final Camera camera;
     private final TiledMap map;
 
@@ -38,14 +41,10 @@ public class World extends PlayState {
         // Load map
         TiledMapLoader.LoadedMapData data = game.getTiledLoader().load(path);
         map = new TiledMap(game, data);
-        game.setTiledMap(map); // <-- make map accessible to other systems (Player)
-
-        // Load buttons
-        InteractButton interactButton = new InteractButton(game.getScreenWidth() / 2,game.getScreenHeight()/2);
-
+        game.setTiledMap(map); 
 
         // Camera and player
-        player = new Player(game, this, game.getOriginalTileSize(), game.getOriginalTileSize());
+        player = new Player(game, this);
         camera = new Camera(game.getCanvas().getWidth(), game.getCanvas().getHeight());
         orc = new Orc(game, this, game.getOriginalTileSize(), game.getOriginalTileSize());
 
@@ -54,18 +53,22 @@ public class World extends PlayState {
         entities.add(player);
         entities.add(orc);
 
+        // Load ui
+        interactButton = new InteractButton(player.getX(),player.getY());
+
         camera.setZoom(3);
         System.out.println("World initialized with " + entities.size() + " entities.");
     }
 
     @Override
-    public void load() {
-
-    
-    }
-
-    @Override
     public void update(double delta) {
+        var keys = game.getKeyboardInput();
+
+        if (keys.consumeKey(KeyCode.ENTER)) chat.toggle();
+        if (chat.isActive()) {
+            chat.update(keys);
+            return;
+        }
         collidables.clear();
         hittables.clear();
         interactables.clear();
@@ -98,7 +101,7 @@ public class World extends PlayState {
 
         int tileSize = (int)game.getTileSize();
 
-        // --- compute visible tile range ---
+        // compute visible tile range
         int startX = (int)(camera.getX() / tileSize);
         int endX   = (int)((camera.getX() + camera.getViewportWidth() / camera.getZoom()) / tileSize) + 1;
         int startY = (int)(camera.getY() / tileSize);
@@ -110,7 +113,7 @@ public class World extends PlayState {
         endX   = Math.min(map.getMapWidth(),  endX);
         endY   = Math.min(map.getMapHeight(), endY);
 
-        // --- draw only visible tiles ---
+        // Render only visible tiles
         for (int y = startY; y < endY; y++) {
             for (int x = startX; x < endX; x++) {
                 Tile tile = map.getTile(x, y);
@@ -123,7 +126,7 @@ public class World extends PlayState {
             }
         }
 
-        // --- draw only visible entities ---
+        // Render only visible entities
         entities.sort(Comparator.comparingDouble(Entity::getBottomY));
         for (Entity e : entities) {
             // skip off-screen entities
@@ -140,9 +143,39 @@ public class World extends PlayState {
 
             if (visible) e.render(g);
         }
-        debug(g);
-        g.restore();
 
+
+        // Interaction
+        for (Interactable i : interactables) {
+            if (i == player) continue;
+            if (!i.canInteract()) continue;
+
+            boolean overlapping = i.getInteractArea().intersects(player.getInteractArea());
+
+            if (overlapping) {
+                if (game.getKeyboardInput().consumeKey(KeyCode.E)) {
+                    player.setInteraction(true);
+                    if (i instanceof Orc o) o.setInteraction(true);
+                }
+
+                if (!player.isInteraction()) {
+                    interactButton.setPosition(player.getX() + interactButton.getWidth()/2, player.getY() - 20);
+                    interactButton.render(g);
+                }
+            } else {
+                player.setInteraction(false);
+                if (i instanceof Orc o) o.setInteraction(false);
+            }
+        }
+
+
+        // Chat
+
+
+        chat.render(g, player);
+        debug(g);
+       
+        g.restore();
     }
 
 

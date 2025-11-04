@@ -26,6 +26,8 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
     private Image[][] animations;
     private int pixels; 
 
+
+    // Animation
     private boolean up, down, left, right = false;
     private boolean moving;
     private double aniTimer;
@@ -34,8 +36,11 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
     private final int moveDown = 0, moveUp = 1, moveLeft = 2, moveRight = 3;
     private int playerAction = moveLeft;
 
+     // Interaction
+    private boolean interaction = false;
 
-    public Player(Game game, World world, double x, double y) {
+
+    public Player(Game game, World world) {
         super(game, game.getTileSize()*247, game.getTileSize()*250, game.getTileSize(), game.getTileSize(), 100);
         this.world = world;
         this.spriteSheet = new Image(getClass().getResource("/assets/actors/player/orc.png").toExternalForm());
@@ -44,6 +49,8 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
         setSolidArea(pixels * 0.42,pixels * 0.85,pixels * 0.15,pixels * 0.08);
         setHitbox(0.3,0.5);
         setInteractArea(2, 2);
+
+        
     }
 
     @Override
@@ -216,7 +223,7 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
 
     @Override
     public void onHit(Hittable other) {
-        System.out.println("Hitted!");
+        //System.out.println("Hitted!");
     }
 
 
@@ -252,6 +259,14 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
     @Override
     public boolean canInteract() {
         return true;
+    }
+
+    public boolean isInteraction() {
+        return interaction;
+    }
+
+    public void setInteraction(boolean interaction) {
+        this.interaction = interaction;
     }
 
 

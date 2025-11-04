@@ -1,5 +1,7 @@
 package game.entities.actors.npc;
 
+import java.time.format.TextStyle;
+
 import engine.core.Game;
 import engine.map.TiledMap;
 import engine.physics.Collision;
@@ -16,6 +18,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import utilities.Utility;
 
 public class Orc extends Actor implements Collidable, Damageable, Moveable, Hittable {
@@ -50,7 +55,6 @@ public class Orc extends Actor implements Collidable, Damageable, Moveable, Hitt
         setSolidArea(pixels * 0.42,pixels * 0.85,pixels * 0.15,pixels * 0.08);
         setHitbox(0.3,0.5);
         setInteractArea(1, 1);
-
     }
 
     @Override
@@ -59,7 +63,7 @@ public class Orc extends Actor implements Collidable, Damageable, Moveable, Hitt
             move(delta);
             updateAnimation(delta);
             setAnimationDirection();
-        }
+        } 
     }
 
     @Override
@@ -68,6 +72,20 @@ public class Orc extends Actor implements Collidable, Damageable, Moveable, Hitt
         Image frame = animations[aniIndex][orcAction];
         // Draw the player
         g.drawImage(frame, x, y, width, height);
+
+
+        if (interaction) {
+            String text = "Who you be?";
+            Font pixelFont = Font.loadFont(getClass().getResourceAsStream("/ui/fonts/minecraft_font.ttf"), 6);
+            g.setFont(pixelFont);
+            g.setFill(Color.web("#b07409"));
+            double textWidth = text.length() * 3; 
+            double drawX = x + (width/2) - (textWidth/2);
+            double drawY = y - 10;
+
+            g.fillText(text, drawX, drawY);
+        }
+
     }
 
     @Override
@@ -192,7 +210,7 @@ public class Orc extends Actor implements Collidable, Damageable, Moveable, Hitt
     }
     @Override
     public void onHit(Hittable other) {
-       System.out.println("Orc hit!");
+       //System.out.println("Orc hit!");
     }
 
     // --Collidable--
@@ -222,9 +240,8 @@ public class Orc extends Actor implements Collidable, Damageable, Moveable, Hitt
 
     @Override
     public void onInteract(Entity other) {
-        if (game.getKeyboardInput().isKeyPressed(KeyCode.E)) {
-            interaction = true;
-            System.out.println(interaction);
+        if (interaction) {
+            orcAction = moveDown;
         }
     }
 
@@ -233,4 +250,8 @@ public class Orc extends Actor implements Collidable, Damageable, Moveable, Hitt
         return true;
     }
 
+    //SETTERS
+    public void setInteraction(boolean interaction) {
+        this.interaction = interaction;
+    }
 }

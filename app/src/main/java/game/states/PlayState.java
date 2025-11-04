@@ -3,21 +3,25 @@ package game.states;
 import engine.core.Game;
 import engine.core.GameState;
 import game.states.play.World;
+import game.states.play.ui.Chat;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 
 public class PlayState extends GameState {
     private World world;
+    protected Chat chat;
 
     public PlayState(Game game) {
         super(game);
         System.out.println("PlayState initialized.");
+        chat = new Chat();
     }
 
     @Override
     public void load() {
         // Load the world once when this state starts
         world = new World(game);
+        chat = new Chat();
     }
 
     @Override
