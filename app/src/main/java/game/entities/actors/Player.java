@@ -58,7 +58,6 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
         setAnimationDirection();
     }
 
-
     @Override
     public void render(GraphicsContext g) {
         Image frame = animations[aniIndex][playerAction];

@@ -46,8 +46,9 @@ public class MainMenu extends MenuState{
     // Called from MenuState.render(gc)
     @Override
     public void render(GraphicsContext g) {
-        
+        g.clearRect(0, 0, canvasWidth, canvasHeight); // clears previous frame
         drawUI(g);
+    
     }
 
     @Override
