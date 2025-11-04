@@ -61,15 +61,14 @@ public class World extends PlayState {
 
     @Override
     public void update(double delta) {
+        //Chat
         var keys = game.getKeyboardInput();
-
         if (keys.consumeKey(KeyCode.ENTER)) chat.toggle();
         if (chat.isActive()) {
             chat.update(keys);
         } else {
             player.handleInput();
         }
-
 
         //Interfaces
         collidables.clear();
@@ -87,7 +86,6 @@ public class World extends PlayState {
 
         //Camera update
         camera.update(player.getX(),player.getY(),game.getTileSize(),map.getMapWidth(),(map.getMapHeight()));
-
         
     }
 
