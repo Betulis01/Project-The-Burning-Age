@@ -49,13 +49,10 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
         setSolidArea(pixels * 0.42,pixels * 0.85,pixels * 0.15,pixels * 0.08);
         setHitbox(0.3,0.5);
         setInteractArea(2, 2);
-
-        
     }
 
     @Override
     public void update(double delta) {
-        handleInput();
         move(delta);
         updateAnimation(delta);
         setAnimationDirection();

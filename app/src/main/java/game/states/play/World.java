@@ -5,7 +5,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import engine.core.Game;
-import engine.input.KeyboardInput;
 import engine.map.TiledMap;
 import engine.map.TiledMapLoader;
 import engine.physics.Collision;
@@ -67,22 +66,20 @@ public class World extends PlayState {
         if (keys.consumeKey(KeyCode.ENTER)) chat.toggle();
         if (chat.isActive()) {
             chat.update(keys);
-            return;
+        } else {
+            player.handleInput();
         }
+
+
+        //Interfaces
         collidables.clear();
         hittables.clear();
         interactables.clear();
         for (Entity e : entities) {
             e.update(delta);
-            if (e instanceof Collidable c) {
-                collidables.add(c);
-            }
-            if (e instanceof Hittable h) {
-                hittables.add(h);
-            }
-            if (e instanceof Interactable i) {
-                interactables.add(i);
-            }
+            if (e instanceof Collidable c) collidables.add(c);
+            if (e instanceof Hittable h) hittables.add(h);
+            if (e instanceof Interactable i) interactables.add(i);
         }
         Collision.handleSolidCollisions(collidables);
         Collision.handleHitCollisions(hittables);
@@ -144,7 +141,6 @@ public class World extends PlayState {
             if (visible) e.render(g);
         }
 
-
         // Interaction
         for (Interactable i : interactables) {
             if (i == player) continue;
@@ -168,11 +164,10 @@ public class World extends PlayState {
             }
         }
 
-
         // Chat
-
-
         chat.render(g, player);
+        
+        //Debug
         debug(g);
        
         g.restore();

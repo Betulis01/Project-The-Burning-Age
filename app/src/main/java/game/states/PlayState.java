@@ -14,14 +14,14 @@ public class PlayState extends GameState {
     public PlayState(Game game) {
         super(game);
         System.out.println("PlayState initialized.");
-        chat = new Chat();
+        chat = new Chat(game);
     }
 
     @Override
     public void load() {
         // Load the world once when this state starts
         world = new World(game);
-        chat = new Chat();
+        chat = new Chat(game);
     }
 
     @Override

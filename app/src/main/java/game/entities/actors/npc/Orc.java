@@ -1,7 +1,5 @@
 package game.entities.actors.npc;
 
-import java.time.format.TextStyle;
-
 import engine.core.Game;
 import engine.map.TiledMap;
 import engine.physics.Collision;
@@ -17,10 +15,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
-import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import utilities.Utility;
 
 public class Orc extends Actor implements Collidable, Damageable, Moveable, Hittable {
@@ -76,8 +71,7 @@ public class Orc extends Actor implements Collidable, Damageable, Moveable, Hitt
 
         if (interaction) {
             String text = "Who you be?";
-            Font pixelFont = Font.loadFont(getClass().getResourceAsStream("/ui/fonts/minecraft_font.ttf"), 6);
-            g.setFont(pixelFont);
+            g.setFont(game.getPixelFont());
             g.setFill(Color.web("#b07409"));
             double textWidth = text.length() * 3; 
             double drawX = x + (width/2) - (textWidth/2);

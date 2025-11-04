@@ -9,6 +9,7 @@ import engine.physics.Collision;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import utilities.Utility;
 
@@ -38,6 +39,9 @@ public class Game {
     private GameState currentState;
     private boolean running = true;
 
+    //Font
+    private Font pixelFont;
+
     public Game(Engine engine, Stage stage, double width, double height) {
         this.engine = engine;
         this.stage = stage;
@@ -46,7 +50,7 @@ public class Game {
 
         computeDeviceScale(virtualWidth, virtualHeight);
         initTileScaling();
-
+        
         this.canvas = new Canvas(screenWidth, screenHeight);
         this.scene = new Scene(new javafx.scene.layout.Pane(canvas));
         this.g = canvas.getGraphicsContext2D();
@@ -77,6 +81,7 @@ public class Game {
         tiledLoader = new TiledMapLoader();
         collision = new Collision();
         utility = new Utility();
+        pixelFont = Font.loadFont(getClass().getResourceAsStream("/ui/fonts/minecraft_font.ttf"), 6);
     }
 
     private void initInputs() {
@@ -140,5 +145,9 @@ public class Game {
 
     public Collision getCollision() {
         return collision;
+    }
+
+    public Font getPixelFont() {
+        return pixelFont;
     }
 }
