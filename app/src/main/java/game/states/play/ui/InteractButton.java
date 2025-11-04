@@ -6,10 +6,17 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 
 public class InteractButton {
+<<<<<<< HEAD
     public final int width = 16;
     public final int height = 16;
     private static final int buttonWidth = 16;
     private static final int buttonHeight = 16;
+=======
+    public static final int pixelWidth = 16;
+    public static final int pixelHeight = 16;
+    private static final int buttonWidth = 16 * 2;
+    private static final int buttonHeight = 16 * 2;
+>>>>>>> 620380be016a52dfc6394ce403c34743c4414a1f
 
     private Image spriteSheet;
     private Image[] frames;
@@ -22,9 +29,13 @@ public class InteractButton {
         this.x = x;
         this.y = y;
         this.spriteSheet = new Image(getClass().getResource("/assets/ui/e_button.png").toExternalForm());
+<<<<<<< HEAD
 
         loadAnimations();
 
+=======
+        loadAnimations();
+>>>>>>> 620380be016a52dfc6394ce403c34743c4414a1f
     }
 
     public void render(GraphicsContext g) {
