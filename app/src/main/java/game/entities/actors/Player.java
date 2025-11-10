@@ -2,8 +2,10 @@ package game.entities.actors;
 
 import engine.core.Game;
 import engine.input.KeyboardInput;
+import engine.input.MouseInput;
 import engine.map.TiledMap;
 import engine.physics.Collision;
+import engine.render.Camera;
 import game.entities.Actor;
 import game.entities.Entity;
 import game.entities.behavior.Collidable;
@@ -28,13 +30,15 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
 
 
     // Animation
+    private enum Direction {
+        UP, UPRIGHT, RIGHT, DOWNRIGHT, DOWN, DOWNLEFT, LEFT, UPLEFT
+    }
     private boolean up, down, left, right = false;
     private boolean moving;
     private double aniTimer;
     private int aniIndex;
     private final double aniSpeed = 0.2; // seconds per frame 
-    private final int moveDown = 0, moveUp = 1, moveLeft = 2, moveRight = 3;
-    private int playerAction = moveLeft;
+    private Direction direction = Direction.DOWN;
 
      // Interaction
     private boolean interaction = false;
@@ -43,7 +47,7 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
     public Player(Game game, World world) {
         super(game, game.getTileSize()*247, game.getTileSize()*250, game.getTileSize(), game.getTileSize(), 100);
         this.world = world;
-        this.spriteSheet = new Image(getClass().getResource("/assets/actors/player/orc.png").toExternalForm());
+        this.spriteSheet = new Image(getClass().getResource("/assets/actors/player/orc8.png").toExternalForm());
         this.pixels = 32;
         loadAnimations();
         setSolidArea(pixels * 0.42,pixels * 0.85,pixels * 0.15,pixels * 0.08);
@@ -60,8 +64,7 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
 
     @Override
     public void render(GraphicsContext g) {
-        Image frame = animations[aniIndex][playerAction];
-
+        Image frame = animations[aniIndex][direction.ordinal()];
         int tileSize = (int) game.getTileSize();
         int tileX = (int) ((x + tileSize / 2) / tileSize);
         int tileY = (int) ((y + tileSize) / tileSize);
@@ -172,25 +175,60 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
 
     private void updateAnimation(double delta) {
         if (moving) {
-                aniTimer += delta;
-                if (aniTimer >= aniSpeed) {
-                    aniTimer = 0;
-                    aniIndex++;
-                    if (aniIndex >= animations.length) {
-                    aniIndex = 1;
-                    }
-                }
+            aniTimer += delta;
+            if (aniTimer >= aniSpeed) {
+                aniTimer = 0;
+                aniIndex++;
+                if (aniIndex > 2) aniIndex = 1; // loop between 1–2 while moving
+            }
         } else {
-            aniIndex = 0;
+            aniIndex = 0; // idle frame
         }
     }
 
+
     private void setAnimationDirection() {
-        if (up)    playerAction = moveUp;
-        if (down)  playerAction = moveDown;
-        if (left)  playerAction = moveLeft;
-        if (right) playerAction = moveRight;
+        MouseInput mouse = game.getMouseInput();
+        Camera camera = world.getCamera();
+
+        // Convert screen → world coordinates
+        double mxWorld = camera.getX() + mouse.getMouseX() / camera.getZoom();
+        double myWorld = camera.getY() + mouse.getMouseY() / camera.getZoom();
+
+        // Player center
+        double px = x + width / 2;
+        double py = y + height / 2;
+
+        double dx = mxWorld - px;
+        double dy = myWorld - py;
+
+        double angle = Math.toDegrees(Math.atan2(dy, dx));
+        if (angle < 0) angle += 360;
+
+        if (!moving) {
+            // Face mouse
+            if (angle >= 337.5 || angle < 22.5) direction = Direction.RIGHT;
+            else if (angle < 67.5)  direction = Direction.DOWNRIGHT;
+            else if (angle < 112.5) direction = Direction.DOWN;
+            else if (angle < 157.5) direction = Direction.DOWNLEFT;
+            else if (angle < 202.5) direction = Direction.LEFT;
+            else if (angle < 247.5) direction = Direction.UPLEFT;
+            else if (angle < 292.5) direction = Direction.UP;
+            else direction = Direction.UPRIGHT;
+        } else {
+            // Face movement
+            if (up && right)       direction = Direction.UPRIGHT;
+            else if (up && left)   direction = Direction.UPLEFT;
+            else if (down && right)direction = Direction.DOWNRIGHT;
+            else if (down && left) direction = Direction.DOWNLEFT;
+            else if (up)           direction = Direction.UP;
+            else if (down)         direction = Direction.DOWN;
+            else if (left)         direction = Direction.LEFT;
+            else if (right)        direction = Direction.RIGHT;
+        }
     }
+
+
 
     @Override
     public double getBottomY() {
@@ -202,14 +240,21 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
 
 
     private void loadAnimations() {
-        animations = new Image[3][4];
-        for (int i = 0; i < animations.length; i++) {
-            for (int j = 0; j < animations[i].length; j++) {
-                PixelReader reader = spriteSheet.getPixelReader();
-                animations[i][j] = new WritableImage(reader, i * pixels, j * pixels, pixels, pixels);
+        int frameCount = 3;  // 3 frames per direction
+        int directionCount = 8;
+        animations = new Image[frameCount][directionCount];
+
+        PixelReader reader = spriteSheet.getPixelReader();
+        for (int dir = 0; dir < directionCount; dir++) {
+            for (int frame = 0; frame < frameCount; frame++) {
+                animations[frame][dir] = new WritableImage(reader,
+                    frame * pixels,    // x offset (frame)
+                    dir * pixels,      // y offset (direction)
+                    pixels, pixels);
             }
         }
     }
+
 
     // --Hittable--
     @Override
