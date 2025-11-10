@@ -186,7 +186,6 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
         }
     }
 
-
     private void setAnimationDirection() {
         MouseInput mouse = game.getMouseInput();
         Camera camera = world.getCamera();
