@@ -21,6 +21,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 
 public class Player extends Actor implements Collidable, Hittable, Controllable, Moveable, Swimmer {
     private World world;
@@ -33,14 +34,16 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
     private enum Direction {
         UP, UPRIGHT, RIGHT, DOWNRIGHT, DOWN, DOWNLEFT, LEFT, UPLEFT
     }
-    private boolean up, down, left, right = false;
-    private boolean moving;
+    private Direction direction = Direction.DOWN;
     private double aniTimer;
     private int aniIndex;
     private final double aniSpeed = 0.2; // seconds per frame 
-    private Direction direction = Direction.DOWN;
-
-     // Interaction
+    
+    // Movement
+    private boolean up = false, down = false, left = false, right = false;
+    private boolean moving;
+    
+    // Interaction
     private boolean interaction = false;
 
 
@@ -204,8 +207,8 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
         double angle = Math.toDegrees(Math.atan2(dy, dx));
         if (angle < 0) angle += 360;
 
-        if (!moving) {
-            // Face mouse
+        // Face mouse when stationary and right-click pressed
+        if (!moving && mouse.isButtonDown(MouseButton.SECONDARY)) {
             if (angle >= 337.5 || angle < 22.5) direction = Direction.RIGHT;
             else if (angle < 67.5)  direction = Direction.DOWNRIGHT;
             else if (angle < 112.5) direction = Direction.DOWN;
@@ -214,8 +217,9 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
             else if (angle < 247.5) direction = Direction.UPLEFT;
             else if (angle < 292.5) direction = Direction.UP;
             else direction = Direction.UPRIGHT;
-        } else {
-            // Face movement
+        } 
+        // Face movement
+        else {
             if (up && right)       direction = Direction.UPRIGHT;
             else if (up && left)   direction = Direction.UPLEFT;
             else if (down && right)direction = Direction.DOWNRIGHT;
@@ -226,6 +230,7 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
             else if (right)        direction = Direction.RIGHT;
         }
     }
+
 
 
 

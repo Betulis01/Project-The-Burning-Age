@@ -90,6 +90,8 @@ public class Game {
         canvas.setOnMouseMoved(mouseInput::onMouseMoved);
         canvas.setOnMousePressed(mouseInput::onMousePressed);
         canvas.setOnMouseReleased(mouseInput::onMouseReleased);
+        canvas.setOnMouseMoved(mouseInput::onMouseMoved);
+        canvas.setOnMouseDragged(mouseInput::onMouseMoved);
         canvas.setOnScroll(mouseInput::onScroll);
         canvas.setOnKeyPressed(keyboardInput::onKeyPressed);
         canvas.setOnKeyReleased(keyboardInput::onKeyReleased);
