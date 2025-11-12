@@ -133,7 +133,6 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
         double dy = 0;
 
         Collision collision = game.getCollision();
-        TiledMap map = game.getTiledMap();
         int tileSize = (int) game.getTileSize();
 
         // Try each direction only if not colliding
