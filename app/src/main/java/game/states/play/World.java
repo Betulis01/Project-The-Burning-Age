@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import engine.core.Game;
+import engine.map.EntityRegistry;
 import engine.map.TiledMap;
 import engine.physics.Collision;
 import engine.render.Camera;
@@ -15,6 +16,7 @@ import game.entities.actors.npc.Orc;
 import game.entities.behavior.Collidable;
 import game.entities.behavior.Hittable;
 import game.entities.behavior.Interactable;
+import game.entities.decorations.other.Bonfire;
 import game.entities.decorations.rocks.RockMedium;
 import game.entities.decorations.trees.TreeTall;
 import game.entities.decorations.trees.TreeWide;
@@ -30,6 +32,7 @@ import javafx.scene.input.KeyCode;
 
 public class World extends PlayState implements GameMap {
     private final TiledMap map;
+    private final EntityRegistry registry;
     private final Tile[][] tiles;
     private final List<Entity> entities = new ArrayList<>();
     private final List<Collidable> collidables = new ArrayList<>();
@@ -47,6 +50,8 @@ public class World extends PlayState implements GameMap {
 
         // Load map
         this.tiles = new Tile[map.getHeight()][map.getWidth()];
+        this.registry = game.getRegistry();
+        registerEntityTypes();
         initializeTiles(map);
         initializeEntities(map);
 
@@ -192,14 +197,7 @@ public class World extends PlayState implements GameMap {
         }
     }
 
-    private void initializeEntities(TiledMap map) {
-        for (TiledMap.MapObject mo : map.getObjects()) {
-            Image img = map.getTileImages().get(mo.gid);
-            Entity e = createEntity(mo, img, map);
-            if (e != null) entities.add(e);
-        }
-    }
-        private Tile createTile(int gid, Image img) {
+    private Tile createTile(int gid, Image img) {
         if (gid <= 0 || img == null) return null;
         if (gid >= 1 && gid <= 36) return new WaterTile(img);
         if (gid >= 37 && gid <= 40) return new GrassTile(img);
@@ -207,30 +205,49 @@ public class World extends PlayState implements GameMap {
         return null;
     }
 
-    private Entity createEntity(TiledMap.MapObject mo, Image img, TiledMap map) {
-        if (mo == null || img == null) return null;
-
-        double scale = game.getTileSize() / map.getTileWidth();
-        double x = mo.x * scale;
-        double y = (mo.y - mo.h) * scale;
-        double w = mo.w * scale;
-        double h = mo.h * scale;
-
-        int gid = mo.gid;
-        Map<Integer, List<Image>> animTiles = map.getAnimatedTiles();
-        Map<Integer, List<Integer>> animDur = map.getAnimatedDurations();
-
-        List<Image> frames = animTiles.getOrDefault(gid, List.of(img));
-        List<Integer> durs = animDur.getOrDefault(gid, List.of(Integer.MAX_VALUE));
-
-        if (gid >= 57 && gid <= 60)
-            return new TreeWide(game, frames, durs, x, y, w, h);
-        if (gid >= 61 && gid <= 64)
-            return new TreeTall(game, frames, durs, x, y, w, h);
-        if (gid == 65)
-            return new RockMedium(game, frames, durs, x, y, w, h);
-        return null;
+    private void initializeEntities(TiledMap map) {
+        for (TiledMap.MapObject mo : map.getObjects()) {
+            Image img = map.getTileImages().get(mo.gid);
+            Entity e = createEntity(mo, img, map);
+            if (e != null) entities.add(e);
+        }
     }
+
+    private void registerEntityTypes() {
+        registry.register("treeWide", (g, mo, img, m) -> {
+            var frames = m.getAnimatedTiles().getOrDefault(mo.gid, List.of(img));
+            var durs   = m.getAnimatedDurations().getOrDefault(mo.gid, List.of(Integer.MAX_VALUE));
+            double s = g.getTileSize() / m.getTileWidth();
+            return new TreeWide(g, frames, durs, mo.x * s, (mo.y - mo.h) * s, mo.w * s, mo.h * s);
+        });
+
+        registry.register("treeTall", (g, mo, img, m) -> {
+            var frames = m.getAnimatedTiles().getOrDefault(mo.gid, List.of(img));
+            var durs   = m.getAnimatedDurations().getOrDefault(mo.gid, List.of(Integer.MAX_VALUE));
+            double s = g.getTileSize() / m.getTileWidth();
+            return new TreeTall(g, frames, durs, mo.x * s, (mo.y - mo.h) * s, mo.w * s, mo.h * s);
+        });
+
+        registry.register("rockMedium", (g, mo, img, m) -> {
+            var frames = m.getAnimatedTiles().getOrDefault(mo.gid, List.of(img));
+            var durs   = m.getAnimatedDurations().getOrDefault(mo.gid, List.of(Integer.MAX_VALUE));
+            double s = g.getTileSize() / m.getTileWidth();
+            return new RockMedium(g, frames, durs, mo.x * s, (mo.y - mo.h) * s, mo.w * s, mo.h * s);
+        });
+
+        registry.register("bonfire", (g, mo, img, m) -> {
+            var frames = m.getAnimatedTiles().getOrDefault(mo.gid, List.of(img));
+            var durs   = m.getAnimatedDurations().getOrDefault(mo.gid, List.of(Integer.MAX_VALUE));
+            double s = g.getTileSize() / m.getTileWidth();
+            return new Bonfire(g, frames, durs, mo.x * s, (mo.y - mo.h) * s, mo.w * s, mo.h * s);
+        });
+    }
+
+    private Entity createEntity(TiledMap.MapObject mo, Image img, TiledMap map) {
+        return registry.create(game, mo, img, map);
+    }
+
+
 
     public void debug(GraphicsContext g) {
         // --- debug solid areas ---

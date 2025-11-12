@@ -14,20 +14,19 @@ public class PlayState extends GameState {
 
     public PlayState(Game game) {
         super(game);
-        System.out.println("PlayState initialized.");
         chat = new Chat(game);
     }
 
     @Override
     public void load() {
         // Load the raw map data
-        var data = game.getTiledLoader().load("/maps/world.tmj");
+        var worldData = game.getTiledLoader().load("/maps/world.tmj");
 
         // Wrap into TiledMap
-        TiledMap map = new TiledMap(data);
+        TiledMap worldMap = new TiledMap(worldData);
 
         // Build the world using that map
-        world = new World(game, map);
+        world = new World(game, worldMap);
 
         // UI
         chat = new Chat(game);

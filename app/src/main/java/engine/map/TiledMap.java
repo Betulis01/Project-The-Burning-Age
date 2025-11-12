@@ -1,8 +1,9 @@
 package engine.map;
 
-import javafx.scene.image.Image;
 import java.util.List;
 import java.util.Map;
+
+import javafx.scene.image.Image;
 
 /**
  * Passive container for parsed map data.
@@ -44,8 +45,11 @@ public class TiledMap {
     public static class MapObject {
         public final int gid;
         public final double x, y, w, h;
-        public MapObject(int gid, double x, double y, double w, double h) {
-            this.gid = gid; this.x = x; this.y = y; this.w = w; this.h = h;
+        public final String type; 
+
+        public MapObject(int gid, double x, double y, double w, double h, String type) {
+            this.gid = gid; this.x = x; this.y = y; this.w = w; this.h = h; this.type = type;
         }
     }
+
 }

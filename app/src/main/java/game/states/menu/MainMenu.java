@@ -15,8 +15,11 @@ public class MainMenu extends MenuState{
     private final Game game;
     private final double canvasWidth;
     private final double canvasHeight;
-    private final Image buttonSpriteSheet;
+    private final Image playButton;
+    private final Image optionsButton;
+    private final Image quitButton;
     private final Image logoSpriteSheet;
+    private final Image background;
 
     private Button play;
     private Button options;
@@ -26,13 +29,18 @@ public class MainMenu extends MenuState{
     public MainMenu(Game game) {
         super(game);
         this.game = game;
-        this.buttonSpriteSheet = new Image(getClass().getResource("/assets/ui/menu_buttons.png").toExternalForm());
+        this.playButton = new Image(getClass().getResource("/assets/ui/play_button.png").toExternalForm());
+        this.optionsButton = new Image(getClass().getResource("/assets/ui/options_button.png").toExternalForm());
+        this.quitButton = new Image(getClass().getResource("/assets/ui/quit_button.png").toExternalForm());
         this.logoSpriteSheet = new Image(getClass().getResource("/assets/ui/dragon_logo.png").toExternalForm());
+        this.background = new Image(getClass().getResource("/assets/ui/mountains_background.png").toExternalForm());
         this.canvasWidth = game.getCanvas().getWidth();
         this.canvasHeight = game.getCanvas().getHeight();
-        System.out.println("Menu initialized.");
 
-        load();
+        play = new Button(playButton, 3, canvasWidth / 2, canvasHeight / 2 + 200,33,16);     // x, y example positions
+        options = new Button(optionsButton, 3, (int)(canvasWidth / 2), canvasHeight / 2 + 300,33,16);
+        quit = new Button(quitButton, 3,(int)(canvasWidth / 2), canvasHeight / 2 + 400,33,16);
+        // logo = new Logo(logoSpriteSheet, 0, 3, (int)(canvasWidth / 2), canvasHeight / 2 - 500);
     }
 
     // Called from MenuState.update()
@@ -47,16 +55,13 @@ public class MainMenu extends MenuState{
     @Override
     public void render(GraphicsContext g) {
         g.clearRect(0, 0, canvasWidth, canvasHeight); // clears previous frame
-        drawUI(g);
+        g.drawImage(background, 0, 0, canvasWidth, canvasHeight);
+        
+        play.render(g);
+        options.render(g);
+        quit.render(g);
+        //logo.render(g);
     
-    }
-
-    @Override
-    public void load() {
-        play = new Button(buttonSpriteSheet, 0, 3, (int)(canvasWidth / 2), canvasHeight / 2 + 100);     // x, y example positions
-        options = new Button(buttonSpriteSheet, 1, 3, (int)(canvasWidth / 2), canvasHeight / 2 + 300);
-        quit = new Button(buttonSpriteSheet, 2, 3,(int)(canvasWidth / 2), canvasHeight / 2 + 400);
-        logo = new Logo(logoSpriteSheet, 0, 3, (int)(canvasWidth / 2), canvasHeight / 2 - 500);
     }
 
     private void handleMouse() {
@@ -66,32 +71,31 @@ public class MainMenu extends MenuState{
 
         // --- PLAY ---
         if (play.isHovered(mx, my)) {
-            play.setFrame(mouse.isMousePressed() ? 2 : 1);
+            play.setCurrentFrame(mouse.isMousePressed() ? 2 : 1);
             if (mouse.consumeRelease()) {
-                play.setFrame(1);
+                play.setCurrentFrame(1);
                 game.changeState(new PlayState(game)); 
-                System.out.println("Play clicked!");
             }
         } else {
-            play.setFrame(0);
+            play.setCurrentFrame(0);
         }
 
         // --- OPTIONS ---
         if (options.isHovered(mx, my)) {
-            options.setFrame(mouse.isMousePressed() ? 2 : 1);
+            options.setCurrentFrame(mouse.isMousePressed() ? 2 : 1);
             if (mouse.consumeRelease()) {
-                options.setFrame(1);
+                options.setCurrentFrame(1);
                 // TODO: add options logic later
             }
         } else {
-            options.setFrame(0);
+            options.setCurrentFrame(0);
         }
 
         // --- QUIT ---
         if (quit.isHovered(mx, my)) {
-            quit.setFrame(mouse.isMousePressed() ? 2 : 1);
+            quit.setCurrentFrame(mouse.isMousePressed() ? 2 : 1);
             if (mouse.consumeRelease()) {
-                quit.setFrame(1);
+                quit.setCurrentFrame(1);
                 Platform.runLater(() -> {
                     game.stopRunning();
                     game.getStage().close();
@@ -99,14 +103,7 @@ public class MainMenu extends MenuState{
                 });
             }
         } else {
-            quit.setFrame(0);
+            quit.setCurrentFrame(0);
         }
-    }
-
-    private void drawUI(GraphicsContext g) {
-        play.draw(g);
-        options.draw(g);
-        quit.draw(g);
-        logo.draw(g);
     }
 }

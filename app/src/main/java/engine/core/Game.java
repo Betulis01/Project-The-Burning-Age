@@ -3,6 +3,7 @@ package engine.core;
 
 import engine.input.KeyboardInput;
 import engine.input.MouseInput;
+import engine.map.EntityRegistry;
 import engine.map.TiledMap;
 import engine.map.TiledMapLoader;
 import engine.physics.Collision;
@@ -23,6 +24,7 @@ public class Game {
     private GraphicsContext g;
     private Collision collision;
     private Utility utility;
+    private EntityRegistry registry;
 
     // World + display settings
     private final double originalTileSize = 32;
@@ -40,7 +42,8 @@ public class Game {
     private boolean running = true;
 
     //Font
-    private Font pixelFont;
+    private Font pixelFont = Font.loadFont(getClass().getResourceAsStream("/ui/fonts/minecraft_font.ttf"), 6);
+
 
     public Game(Engine engine, Stage stage, double width, double height) {
         this.engine = engine;
@@ -79,9 +82,9 @@ public class Game {
     private void initSystems() {
         initInputs();
         tiledLoader = new TiledMapLoader();
+        registry = new EntityRegistry();
         collision = new Collision();
         utility = new Utility();
-        pixelFont = Font.loadFont(getClass().getResourceAsStream("/ui/fonts/minecraft_font.ttf"), 6);
     }
 
     private void initInputs() {
@@ -151,5 +154,9 @@ public class Game {
 
     public Font getPixelFont() {
         return pixelFont;
+    }
+
+    public EntityRegistry getRegistry() {
+        return registry;
     }
 }

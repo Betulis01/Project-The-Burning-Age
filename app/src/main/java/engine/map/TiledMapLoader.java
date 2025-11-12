@@ -1,15 +1,23 @@
 package engine.map;
 
-import com.google.gson.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.WritableImage;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
 
 /**
  * Loads a Tiled (.json + .tsx) map into raw structured data.
@@ -63,7 +71,9 @@ public class TiledMapLoader {
                         double y = oo.get("y").getAsDouble();
                         double w = oo.get("width").getAsDouble();
                         double h = oo.get("height").getAsDouble();
-                        objects.add(new TiledMap.MapObject(gid, x, y, w, h));
+                        String type = oo.has("type") ? oo.get("type").getAsString() : "";
+                        objects.add(new TiledMap.MapObject(gid, x, y, w, h, type));
+
                     }
                 }
             }
