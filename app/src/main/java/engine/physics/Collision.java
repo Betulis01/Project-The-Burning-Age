@@ -2,12 +2,12 @@ package engine.physics;
 
 import java.util.List;
 
-import engine.map.TiledMap;
 import game.entities.Entity;
 import game.entities.behavior.Collidable;
 import game.entities.behavior.Hittable;
 import game.entities.behavior.Interactable;
 import game.entities.behavior.Swimmer;
+import game.states.play.GameMap;
 import game.tiles.Tile;
 import game.tiles.behaviors.Swimmable;
 import javafx.geometry.Rectangle2D;
@@ -54,7 +54,7 @@ public class Collision {
         }
     }
 
-    public boolean willCollideWithSolid(TiledMap map, Collidable mover, double dx, double dy, int tileSize, List<Entity> entities) {
+    public boolean willCollideWithSolid(GameMap map, Collidable mover, double dx, double dy, int tileSize, List<Entity> entities) {
         Rectangle2D next = new Rectangle2D(mover.getSolidArea().getMinX() + dx, mover.getSolidArea().getMinY() + dy, mover.getSolidArea().getWidth(), mover.getSolidArea().getHeight());
 
         //--- Tile collision ---

@@ -3,7 +3,6 @@ package game.entities.actors;
 import engine.core.Game;
 import engine.input.KeyboardInput;
 import engine.input.MouseInput;
-import engine.map.TiledMap;
 import engine.physics.Collision;
 import engine.render.Camera;
 import game.entities.Actor;
@@ -13,7 +12,7 @@ import game.entities.behavior.Controllable;
 import game.entities.behavior.Hittable;
 import game.entities.behavior.Moveable;
 import game.entities.behavior.Swimmer;
-import game.states.play.World;
+import game.states.play.GameMap;
 import game.tiles.Tile;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -24,7 +23,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 
 public class Player extends Actor implements Collidable, Hittable, Controllable, Moveable, Swimmer {
-    private World world;
+    private GameMap map;
     private final Image spriteSheet;
     private Image[][] animations;
     private int pixels; 
@@ -47,9 +46,9 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
     private boolean interaction = false;
 
 
-    public Player(Game game, World world) {
+    public Player(Game game, GameMap map) {
         super(game, game.getTileSize()*247, game.getTileSize()*250, game.getTileSize(), game.getTileSize(), 100);
-        this.world = world;
+        this.map = map;
         this.spriteSheet = new Image(getClass().getResource("/assets/actors/player/orc8.png").toExternalForm());
         this.pixels = 32;
         loadAnimations();
@@ -72,10 +71,10 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
         int tileX = (int) ((x + tileSize / 2) / tileSize);
         int tileY = (int) ((y + tileSize) / tileSize);
 
-        Tile t = game.getTiledMap().getTile(tileX, tileY);
+        Tile t = map.getTile(tileX, tileY);
 
         // Swimming Y-offset from the Swimmer interface
-        double offsetY = computeSwimOffsetY(game.getTiledMap(), x, y, tileSize);
+        double offsetY = computeSwimOffsetY(map, x, y, tileSize);
 
         // --- normal draw if not in swimmable tile ---
         if (!(t instanceof game.tiles.behaviors.Swimmable)) {
@@ -137,39 +136,39 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
 
         // Try each direction only if not colliding
         if (up && !down && !collisionUp) {
-            if (!collision.willCollideWithSolid(map, this, 0, -moveSpeed, tileSize, world.getEntities())) {
+            if (!collision.willCollideWithSolid(map, this, 0, -moveSpeed, tileSize, map.getEntities())) {
                 dy -= moveSpeed;
                 moving = true;
             }
         }
         if (down && !up && !collisionDown) {
-            if (!collision.willCollideWithSolid(map, this, 0, moveSpeed, tileSize, world.getEntities())) {
+            if (!collision.willCollideWithSolid(map, this, 0, moveSpeed, tileSize, map.getEntities())) {
                 dy += moveSpeed;
                 moving = true;
             }
         }
         if (left && !right && !collisionLeft) {
-            if (!collision.willCollideWithSolid(map, this, -moveSpeed, 0, tileSize, world.getEntities())) {
+            if (!collision.willCollideWithSolid(map, this, -moveSpeed, 0, tileSize, map.getEntities())) {
                 dx -= moveSpeed;
                 moving = true;
             }
         }
         if (right && !left && !collisionRight) {
-            if (!collision.willCollideWithSolid(map, this, moveSpeed, 0, tileSize, world.getEntities())) {
+            if (!collision.willCollideWithSolid(map, this, moveSpeed, 0, tileSize, map.getEntities())) {
                 dx += moveSpeed;
                 moving = true;
             }
         }
 
         // Apply if no solid collision on the combined move
-        if (!collision.willCollideWithSolid(map, this, dx, dy, tileSize, world.getEntities())) {
+        if (!collision.willCollideWithSolid(map, this, dx, dy, tileSize, map.getEntities())) {
             x += dx;
             y += dy;
         }
 
         // Clamp inside world bounds
-        double maxX = (map.getMapWidth()  * game.getTileSize()) - width;
-        double maxY = (map.getMapHeight() * game.getTileSize()) - height;
+        double maxX = (map.getWidth()  * game.getTileSize()) - width;
+        double maxY = (map.getHeight() * game.getTileSize()) - height;
         x = Math.max(0, Math.min(x, maxX));
         y = Math.max(0, Math.min(y, maxY));
     }
@@ -190,7 +189,7 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
 
     private void setAnimationDirection() {
         MouseInput mouse = game.getMouseInput();
-        Camera camera = world.getCamera();
+        Camera camera = map.getCamera();
 
         // Convert screen → world coordinates
         double mxWorld = camera.getX() + mouse.getMouseX() / camera.getZoom();
@@ -229,9 +228,6 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
             else if (right)        direction = Direction.RIGHT;
         }
     }
-
-
-
 
     @Override
     public double getBottomY() {

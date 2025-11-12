@@ -3,10 +3,10 @@ package game.states.play;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 import engine.core.Game;
 import engine.map.TiledMap;
-import engine.map.TiledMapLoader;
 import engine.physics.Collision;
 import engine.render.Camera;
 import game.entities.Entity;
@@ -15,13 +15,22 @@ import game.entities.actors.npc.Orc;
 import game.entities.behavior.Collidable;
 import game.entities.behavior.Hittable;
 import game.entities.behavior.Interactable;
+import game.entities.decorations.rocks.RockMedium;
+import game.entities.decorations.trees.TreeTall;
+import game.entities.decorations.trees.TreeWide;
 import game.states.PlayState;
 import game.states.play.ui.InteractButton;
+import game.tiles.GrassTile;
+import game.tiles.SandTile;
 import game.tiles.Tile;
+import game.tiles.WaterTile;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 
-public class World extends PlayState {
+public class World extends PlayState implements GameMap {
+    private final TiledMap map;
+    private final Tile[][] tiles;
     private final List<Entity> entities = new ArrayList<>();
     private final List<Collidable> collidables = new ArrayList<>();
     private final List<Hittable> hittables = new ArrayList<>();
@@ -30,25 +39,24 @@ public class World extends PlayState {
     private final Orc orc;
     private final InteractButton interactButton;
     private final Camera camera;
-    private final TiledMap map;
+    
 
-    private static final String path = "/maps/world.tmj";
-
-    public World(Game game) {
+    public World(Game game, TiledMap map) {
         super(game);
+        this.map = map;
 
         // Load map
-        TiledMapLoader.LoadedMapData data = game.getTiledLoader().load(path);
-        map = new TiledMap(game, data);
-        game.setTiledMap(map); 
+        this.tiles = new Tile[map.getHeight()][map.getWidth()];
+        initializeTiles(map);
+        initializeEntities(map);
+
 
         // Camera and player
         player = new Player(game, this);
         camera = new Camera(game.getCanvas().getWidth(), game.getCanvas().getHeight());
         orc = new Orc(game, this, game.getOriginalTileSize(), game.getOriginalTileSize());
 
-        // Load entities from map
-        entities.addAll(map.getEntities());
+        // Load actors from map
         entities.add(player);
         entities.add(orc);
 
@@ -85,7 +93,7 @@ public class World extends PlayState {
         Collision.handleInteractions(interactables, player);
 
         //Camera update
-        camera.update(player.getX(),player.getY(),game.getTileSize(),map.getMapWidth(),(map.getMapHeight()));
+        camera.update(player.getX(),player.getY(),game.getTileSize(),map.getWidth(),(map.getHeight()));
         
     }
 
@@ -105,13 +113,13 @@ public class World extends PlayState {
         // clamp to map size
         startX = Math.max(0, startX);
         startY = Math.max(0, startY);
-        endX   = Math.min(map.getMapWidth(),  endX);
-        endY   = Math.min(map.getMapHeight(), endY);
+        endX   = Math.min(map.getWidth(),  endX);
+        endY   = Math.min(map.getHeight(), endY);
 
         // --- draw only visible tiles ---
         for (int y = startY; y < endY; y++) {
             for (int x = startX; x < endX; x++) {
-                Tile tile = map.getTile(x, y);
+                Tile tile = getTile(x, y);
                 if (tile == null) continue;
 
                 double worldX = x * tileSize;
@@ -171,6 +179,58 @@ public class World extends PlayState {
         g.restore();
     }
 
+    private void initializeTiles(TiledMap map) {
+        int[][] ids = map.getTileIds();
+        Map<Integer, Image> images = map.getTileImages();
+
+        for (int y = 0; y < map.getHeight(); y++) {
+            for (int x = 0; x < map.getWidth(); x++) {
+                int gid = ids[y][x];
+                Image img = images.get(gid);
+                tiles[y][x] = createTile(gid, img);
+            }
+        }
+    }
+
+    private void initializeEntities(TiledMap map) {
+        for (TiledMap.MapObject mo : map.getObjects()) {
+            Image img = map.getTileImages().get(mo.gid);
+            Entity e = createEntity(mo, img, map);
+            if (e != null) entities.add(e);
+        }
+    }
+        private Tile createTile(int gid, Image img) {
+        if (gid <= 0 || img == null) return null;
+        if (gid >= 1 && gid <= 36) return new WaterTile(img);
+        if (gid >= 37 && gid <= 40) return new GrassTile(img);
+        if (gid >= 41 && gid <= 57) return new SandTile(img);
+        return null;
+    }
+
+    private Entity createEntity(TiledMap.MapObject mo, Image img, TiledMap map) {
+        if (mo == null || img == null) return null;
+
+        double scale = game.getTileSize() / map.getTileWidth();
+        double x = mo.x * scale;
+        double y = (mo.y - mo.h) * scale;
+        double w = mo.w * scale;
+        double h = mo.h * scale;
+
+        int gid = mo.gid;
+        Map<Integer, List<Image>> animTiles = map.getAnimatedTiles();
+        Map<Integer, List<Integer>> animDur = map.getAnimatedDurations();
+
+        List<Image> frames = animTiles.getOrDefault(gid, List.of(img));
+        List<Integer> durs = animDur.getOrDefault(gid, List.of(Integer.MAX_VALUE));
+
+        if (gid >= 57 && gid <= 60)
+            return new TreeWide(game, frames, durs, x, y, w, h);
+        if (gid >= 61 && gid <= 64)
+            return new TreeTall(game, frames, durs, x, y, w, h);
+        if (gid == 65)
+            return new RockMedium(game, frames, durs, x, y, w, h);
+        return null;
+    }
 
     public void debug(GraphicsContext g) {
         // --- debug solid areas ---
@@ -212,4 +272,15 @@ public class World extends PlayState {
     public List<Entity> getEntities() {
         return entities;
     }
+
+    public Tile getTile(int x, int y) { return tiles[y][x]; }
+
+    @Override
+    public double getTileSize() { return game.getTileSize(); }
+    @Override 
+    public int getWidth() { return map.getWidth(); }
+
+    @Override 
+    public int getHeight() { return map.getHeight(); }
+
 }

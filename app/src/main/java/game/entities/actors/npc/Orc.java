@@ -1,7 +1,6 @@
 package game.entities.actors.npc;
 
 import engine.core.Game;
-import engine.map.TiledMap;
 import engine.physics.Collision;
 import game.entities.Actor;
 import game.entities.Entity;
@@ -9,7 +8,7 @@ import game.entities.behavior.Collidable;
 import game.entities.behavior.Damageable;
 import game.entities.behavior.Hittable;
 import game.entities.behavior.Moveable;
-import game.states.play.World;
+import game.states.play.GameMap;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -19,7 +18,7 @@ import javafx.scene.paint.Color;
 import utilities.Utility;
 
 public class Orc extends Actor implements Collidable, Damageable, Moveable, Hittable {
-    private World world;
+    private GameMap map;
     private final Image spriteSheet;
     private Image[][] animations;
     private int pixels; 
@@ -40,9 +39,9 @@ public class Orc extends Actor implements Collidable, Damageable, Moveable, Hitt
     //Interaction
     private boolean interaction = false;
 
-    public Orc(Game game, World world, double x, double y) {
+    public Orc(Game game, GameMap map, double x, double y) {
         super(game, game.getTileSize()*250, game.getTileSize()*250, game.getTileSize(), game.getTileSize(), 100);
-        this.world = world;
+        this.map = map;
         this.spriteSheet = new Image(getClass().getResource("/assets/actors/npc/orc.png").toExternalForm());
         this.pixels = 32;
 
@@ -112,31 +111,30 @@ public class Orc extends Actor implements Collidable, Damageable, Moveable, Hitt
         }
 
         Collision collision = game.getCollision();
-        TiledMap map = game.getTiledMap();
         int tileSize = (int) game.getTileSize();
 
         moving = up || down || left || right;
         // Try each direction only if not colliding
         if (up && !down && !collisionUp) {
-            if (!collision.willCollideWithSolid(map, this, 0, -moveSpeed, tileSize, world.getEntities())) {
+            if (!collision.willCollideWithSolid(map, this, 0, -moveSpeed, tileSize, map.getEntities())) {
                 y -= moveSpeed;
                 moving = true;
             }
         }
         if (down && !up && !collisionDown) {
-            if (!collision.willCollideWithSolid(map, this, 0, moveSpeed, tileSize, world.getEntities())) {
+            if (!collision.willCollideWithSolid(map, this, 0, moveSpeed, tileSize, map.getEntities())) {
                 y += moveSpeed;
                 moving = true;
             }
         }
         if (left && !right && !collisionLeft) {
-            if (!collision.willCollideWithSolid(map, this, -moveSpeed, 0, tileSize, world.getEntities())) {
+            if (!collision.willCollideWithSolid(map, this, -moveSpeed, 0, tileSize, map.getEntities())) {
                 x -= moveSpeed;
                 moving = true;
             }
         }
         if (right && !left && !collisionRight) {
-            if (!collision.willCollideWithSolid(map, this, moveSpeed, 0, tileSize, world.getEntities())) {
+            if (!collision.willCollideWithSolid(map, this, moveSpeed, 0, tileSize, map.getEntities())) {
                 x += moveSpeed;
                 moving = true;
             }

@@ -2,6 +2,7 @@ package game.states;
 
 import engine.core.Game;
 import engine.core.GameState;
+import engine.map.TiledMap;
 import game.states.play.World;
 import game.states.play.ui.Chat;
 import javafx.scene.canvas.GraphicsContext;
@@ -19,8 +20,16 @@ public class PlayState extends GameState {
 
     @Override
     public void load() {
-        // Load the world once when this state starts
-        world = new World(game);
+        // Load the raw map data
+        var data = game.getTiledLoader().load("/maps/world.tmj");
+
+        // Wrap into TiledMap
+        TiledMap map = new TiledMap(data);
+
+        // Build the world using that map
+        world = new World(game, map);
+
+        // UI
         chat = new Chat(game);
     }
 

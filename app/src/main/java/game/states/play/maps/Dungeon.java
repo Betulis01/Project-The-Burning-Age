@@ -1,4 +1,4 @@
-package game.states.play;
+package game.states.play.maps;
 
 public class Dungeon {
     
