@@ -11,6 +11,7 @@ import engine.map.TiledMap;
 import engine.physics.Collision;
 import engine.render.Camera;
 import game.entities.Entity;
+import game.entities.Item;
 import game.entities.actors.Player;
 import game.entities.actors.npc.Orc;
 import game.entities.behavior.Collidable;
@@ -20,6 +21,7 @@ import game.entities.decorations.other.Bonfire;
 import game.entities.decorations.rocks.RockMedium;
 import game.entities.decorations.trees.TreeTall;
 import game.entities.decorations.trees.TreeWide;
+import game.entities.items.Stick;
 import game.states.PlayState;
 import game.states.play.ui.InteractButton;
 import game.tiles.GrassTile;
@@ -38,8 +40,12 @@ public class World extends PlayState implements GameMap {
     private final List<Collidable> collidables = new ArrayList<>();
     private final List<Hittable> hittables = new ArrayList<>();
     private final List<Interactable> interactables = new ArrayList<>();
+
     private final Player player;
     private final Orc orc;
+
+    private final Item stick;
+
     private final InteractButton interactButton;
     private final Camera camera;
     
@@ -55,15 +61,20 @@ public class World extends PlayState implements GameMap {
         initializeTiles(map);
         initializeEntities(map);
 
-
-        // Camera and player
-        player = new Player(game, this);
+        // Camera
         camera = new Camera(game.getCanvas().getWidth(), game.getCanvas().getHeight());
+
+        // Player and actors
+        player = new Player(game, this);
         orc = new Orc(game, this, game.getOriginalTileSize(), game.getOriginalTileSize());
 
+        //Items
+        stick = new Stick(game, game.getTileSize() * 252, game.getTileSize() * 252);
+        
         // Load actors from map
         entities.add(player);
         entities.add(orc);
+        entities.add(stick);
 
         // Load ui
         interactButton = new InteractButton(player.getX(),player.getY());

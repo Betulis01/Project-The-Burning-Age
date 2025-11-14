@@ -40,7 +40,7 @@ public class Orc extends Actor implements Collidable, Damageable, Moveable, Hitt
     private boolean interaction = false;
 
     public Orc(Game game, GameMap map, double x, double y) {
-        super(game, game.getTileSize()*250, game.getTileSize()*250, game.getTileSize(), game.getTileSize(), 100);
+        super(game, game.getTileSize()*250, game.getTileSize()*250, 32, 32, 100);
         this.map = map;
         this.spriteSheet = new Image(getClass().getResource("/assets/actors/npc/orc.png").toExternalForm());
         this.pixels = 32;

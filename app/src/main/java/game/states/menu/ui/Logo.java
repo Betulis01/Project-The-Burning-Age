@@ -22,11 +22,7 @@ public class Logo {
         frames = new Image[frameCount];
         PixelReader reader = spriteSheet.getPixelReader();
         for (int i = 0; i < frameCount; i++) { 
-            frames[i] = new WritableImage(reader,
-                    i * pixelWidth,
-                    rowIndex * pixelHeight,
-                    pixelWidth,
-                    pixelHeight);
+            frames[i] = new WritableImage(reader,i * pixelWidth,rowIndex * pixelHeight,pixelWidth,pixelHeight);
         }
     }
 

@@ -29,6 +29,7 @@ public class Game {
     // World + display settings
     private final double originalTileSize = 32;
     private double tileSize;      // scaled size in screen pixels
+    private double scale;
     private double deviceScale;   // screen → logical scale
     private double virtualWidth = 1920;
     private double virtualHeight = 1080;
@@ -76,6 +77,7 @@ public class Game {
     private void initTileScaling() {
         // scale tile to match display scaling; adjustable multiplier if you want larger sprites
         tileSize = originalTileSize * deviceScale;
+        scale = tileSize / originalTileSize;
     }
 
     // --- core setup ---
@@ -130,7 +132,6 @@ public class Game {
     public double getScreenWidth() { return screenWidth; }
     public double getScreenHeight() { return screenHeight; }
     public double getOriginalTileSize() { return originalTileSize; }
-
     public Canvas getCanvas() { return canvas; }
     public Scene getScene() { return scene; }
     public GraphicsContext getGraphicsContext() { return g; }
@@ -138,8 +139,6 @@ public class Game {
 
     public boolean isRunning() { return running; }
     public void stopRunning() { running = false; }
-
-
     
     public Engine getEngine() {return engine;}
     public MouseInput getMouseInput() { return mouseInput; }
@@ -158,5 +157,9 @@ public class Game {
 
     public EntityRegistry getRegistry() {
         return registry;
+    }
+
+    public double getScale() {
+        return scale;
     }
 }

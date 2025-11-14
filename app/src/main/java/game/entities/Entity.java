@@ -26,7 +26,6 @@ public abstract class Entity implements Renderable, Updateable, Interactable {
         this.y = y;
         this.width = width;
         this.height = height;
-        
     }
 
     @Override

@@ -1,5 +1,5 @@
 package game.ui;
 
-public class Slot {
+public class UISlot {
     
 }

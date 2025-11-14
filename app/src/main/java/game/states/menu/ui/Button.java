@@ -20,7 +20,7 @@ public class Button extends UIElement implements Hoverable {
     @Override
     public void render(GraphicsContext g) {
         if (!visible) return;
-        g.drawImage(frames[currentFrame], x - width / 2.0, y, width, height);
+        g.drawImage(frames[currentFrame], x - width / 2, y, width, height);
     }
 
     @Override
