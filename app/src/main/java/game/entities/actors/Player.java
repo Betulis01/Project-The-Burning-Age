@@ -5,6 +5,7 @@ import engine.input.KeyboardInput;
 import engine.input.MouseInput;
 import engine.physics.Collision;
 import engine.render.Camera;
+import game.Inventory;
 import game.entities.Actor;
 import game.entities.Entity;
 import game.entities.behavior.Collidable;
@@ -27,6 +28,7 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
     private final Image spriteSheet;
     private Image[][] animations;
     private int pixels; 
+    private Inventory inventory;
 
 
     // Animation
@@ -51,6 +53,7 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
         this.map = map;
         this.spriteSheet = new Image(getClass().getResource("/assets/actors/player/orc8.png").toExternalForm());
         this.pixels = 32;
+        this.inventory = new Inventory(8);
         loadAnimations();
         setSolidArea(pixels * 0.42,pixels * 0.85,pixels * 0.15,pixels * 0.08);
         setHitbox(0.3,0.5);
@@ -309,5 +312,10 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
         this.interaction = interaction;
     }
 
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    
 
 }

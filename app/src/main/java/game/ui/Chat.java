@@ -1,4 +1,4 @@
-package game.states.play.ui;
+package game.ui;
 
 import engine.core.Game;
 import engine.input.KeyboardInput;

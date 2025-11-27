@@ -6,6 +6,7 @@ import game.entities.Entity;
 import game.entities.behavior.Collidable;
 import game.entities.behavior.Hittable;
 import game.entities.behavior.Interactable;
+import game.entities.behavior.Pickupable;
 import game.entities.behavior.Swimmer;
 import game.states.play.GameMap;
 import game.tiles.Tile;
@@ -38,6 +39,20 @@ public class Collision {
                     // damage or combat logic here
                     a.onHit(b);
                     b.onHit(a);
+                }
+            }
+        }
+    }
+
+        // --- Pickup collisions  ---
+    public static void handlePickUpCollisions(List<? extends Pickupable> objects) {
+        for (int i = 0; i < objects.size(); i++) {
+            for (int j = i + 1; j < objects.size(); j++) {
+                var a = objects.get(i);
+                var b = objects.get(j);
+                if (a.getPickUpArea().intersects(b.getPickUpArea())) {
+                    a.onPickUp(b);
+                    b.onPickUp(a);
                 }
             }
         }

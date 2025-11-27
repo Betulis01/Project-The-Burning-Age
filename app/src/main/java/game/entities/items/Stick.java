@@ -1,8 +1,8 @@
 package game.entities.items;
 
 import engine.core.Game;
-import game.entities.Entity;
 import game.entities.Item;
+import game.entities.behavior.Pickupable;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import utilities.SpriteSheet;
@@ -15,8 +15,9 @@ public class Stick extends Item {
 
         SpriteSheet sheet = new SpriteSheet(new Image(getClass().getResource("/assets/items/Stick.png").toExternalForm()),16, 16);        
         this.image = sheet.getFrame(0, 0);
-
+        this.maxStack = 20;
         setSolidArea(0,height*0.6,width,height*0.2);
+        setPickUpArea(0, 0, width, height);
     }
 
     @Override
@@ -34,12 +35,9 @@ public class Stick extends Item {
        return false;
     }
 
-
-
     @Override
-    public void onPickUp(Entity other) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'onPickUp'");
+    public void onPickUp(Pickupable other) {
+
     }
 
     @Override

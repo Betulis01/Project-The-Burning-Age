@@ -7,6 +7,9 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 
 public abstract class Item extends Entity implements Collidable, Pickupable {
+    protected int maxStack;
+    
+    //Frame
     protected int frameIndex = 0;
     protected double timer = 0; // ms accumulator
 
@@ -29,7 +32,6 @@ public abstract class Item extends Entity implements Collidable, Pickupable {
     public void update(double delta) {
         updatePickUpArea();
         updateSolidArea();
-
     }
 
     @Override
@@ -39,7 +41,7 @@ public abstract class Item extends Entity implements Collidable, Pickupable {
     }
 
     
-    public void setPickUpArea(int offsetX, int offsetY, int width, int height) {
+    public void setPickUpArea(double offsetX, double offsetY, double width, double height) {
         pickUpOffsetX = offsetX;
         pickUpOffsetY = offsetY;
         pickUpBaseWidth = width;
@@ -83,4 +85,7 @@ public abstract class Item extends Entity implements Collidable, Pickupable {
         return y; // fallback
     } 
 
+        public int getMaxStack() {
+        return maxStack;
+    }
 }

@@ -1,4 +1,4 @@
-package game.states.play.ui;
+package game.ui;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;

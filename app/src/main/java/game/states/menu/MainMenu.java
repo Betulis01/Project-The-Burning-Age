@@ -2,9 +2,9 @@ package game.states.menu;
 
 import engine.core.Game;
 import engine.input.MouseInput;
+import engine.ui.Button;
 import game.states.MenuState;
 import game.states.PlayState;
-import game.states.menu.ui.Button;
 import game.states.menu.ui.Logo;
 import javafx.application.Platform;
 import javafx.scene.canvas.GraphicsContext;
@@ -29,13 +29,16 @@ public class MainMenu extends MenuState{
     public MainMenu(Game game) {
         super(game);
         this.game = game;
-        this.playButton = new Image(getClass().getResource("/assets/ui/play_button.png").toExternalForm());
-        this.optionsButton = new Image(getClass().getResource("/assets/ui/options_button.png").toExternalForm());
-        this.quitButton = new Image(getClass().getResource("/assets/ui/quit_button.png").toExternalForm());
-        this.logoSpriteSheet = new Image(getClass().getResource("/assets/ui/dragon_logo.png").toExternalForm());
-        this.background = new Image(getClass().getResource("/assets/ui/mountains_background.png").toExternalForm());
-        this.canvasWidth = game.getCanvas().getWidth();
-        this.canvasHeight = game.getCanvas().getHeight();
+
+        canvasWidth = game.getCanvas().getWidth();
+        canvasHeight = game.getCanvas().getHeight();
+
+        playButton = new Image(getClass().getResource("/assets/ui/play_button.png").toExternalForm());
+        optionsButton = new Image(getClass().getResource("/assets/ui/options_button.png").toExternalForm());
+        quitButton = new Image(getClass().getResource("/assets/ui/quit_button.png").toExternalForm());
+        logoSpriteSheet = new Image(getClass().getResource("/assets/ui/dragon_logo.png").toExternalForm());
+        background = new Image(getClass().getResource("/assets/ui/mountains_background.png").toExternalForm());
+
 
         play = new Button(playButton, 3, canvasWidth / 2, canvasHeight / 2 + 200,33,16);     // x, y example positions
         options = new Button(optionsButton, 3, (int)(canvasWidth / 2), canvasHeight / 2 + 300,33,16);
@@ -55,7 +58,7 @@ public class MainMenu extends MenuState{
     @Override
     public void render(GraphicsContext g) {
         g.clearRect(0, 0, canvasWidth, canvasHeight); // clears previous frame
-        g.drawImage(background, 0, 0, canvasWidth, canvasHeight);
+        //g.drawImage(background, 0, 0, canvasWidth, canvasHeight);
         
         play.render(g);
         options.render(g);

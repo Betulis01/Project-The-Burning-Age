@@ -1,7 +1,6 @@
-package game.states.menu.ui;
+package engine.ui;
 
 import engine.input.events.Hoverable;
-import engine.ui.UIElement;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 

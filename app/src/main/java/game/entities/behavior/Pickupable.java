@@ -1,10 +1,10 @@
 package game.entities.behavior;
 
-import game.entities.Entity;
+import game.entities.Item;
 import javafx.geometry.Rectangle2D;
 
 public interface Pickupable {
     Rectangle2D getPickUpArea();
-    void onPickUp(Entity other);
+    void onPickUp(Pickupable other);
     boolean canPickUp();
 }

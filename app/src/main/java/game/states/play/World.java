@@ -2,6 +2,7 @@ package game.states.play;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import engine.map.EntityRegistry;
 import engine.map.TiledMap;
 import engine.physics.Collision;
 import engine.render.Camera;
+import game.Inventory;
 import game.entities.Entity;
 import game.entities.Item;
 import game.entities.actors.Player;
@@ -17,17 +19,18 @@ import game.entities.actors.npc.Orc;
 import game.entities.behavior.Collidable;
 import game.entities.behavior.Hittable;
 import game.entities.behavior.Interactable;
+import game.entities.behavior.Pickupable;
 import game.entities.decorations.other.Bonfire;
 import game.entities.decorations.rocks.RockMedium;
 import game.entities.decorations.trees.TreeTall;
 import game.entities.decorations.trees.TreeWide;
 import game.entities.items.Stick;
 import game.states.PlayState;
-import game.states.play.ui.InteractButton;
 import game.tiles.GrassTile;
 import game.tiles.SandTile;
 import game.tiles.Tile;
 import game.tiles.WaterTile;
+import game.ui.InteractButton;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -40,6 +43,7 @@ public class World extends PlayState implements GameMap {
     private final List<Collidable> collidables = new ArrayList<>();
     private final List<Hittable> hittables = new ArrayList<>();
     private final List<Interactable> interactables = new ArrayList<>();
+    private final List<Pickupable> pickupables = new ArrayList<>();
 
     private final Player player;
     private final Orc orc;
@@ -97,16 +101,20 @@ public class World extends PlayState implements GameMap {
         //Interfaces
         collidables.clear();
         hittables.clear();
+        pickupables.clear();
         interactables.clear();
         for (Entity e : entities) {
             e.update(delta);
             if (e instanceof Collidable c) collidables.add(c);
             if (e instanceof Hittable h) hittables.add(h);
             if (e instanceof Interactable i) interactables.add(i);
+            if (e instanceof Pickupable p) pickupables.add(p);
         }
         Collision.handleSolidCollisions(collidables);
         Collision.handleHitCollisions(hittables);
+        Collision.handlePickUpCollisions(pickupables);
         Collision.handleInteractions(interactables, player);
+     
 
         //Camera update
         camera.update(player.getX(),player.getY(),game.getTileSize(),map.getWidth(),(map.getHeight()));
@@ -185,6 +193,31 @@ public class World extends PlayState implements GameMap {
                 if (i instanceof Orc o) o.setInteraction(false);
             }
         }
+
+        // PickUp
+        Iterator<Pickupable> it = pickupables.iterator();
+        while (it.hasNext()) {
+            Pickupable p = it.next();
+            if (!p.canPickUp()) continue;
+
+            boolean overlapping = p.getPickUpArea().intersects(player.getInteractArea());
+
+            if (overlapping && game.getKeyboardInput().consumeKey(KeyCode.E)) {
+                player.getInventory().addItem((Item)p);
+                it.remove(); // safely remove from pickupable list
+                entities.remove(p); // remove from world entity list
+                continue;
+            }
+
+            if (overlapping) {
+                interactButton.setPosition(player.getX() + interactButton.getWidth() / 2,
+                                        player.getY() - 20);
+                interactButton.render(g);
+            } else {
+                player.setInteraction(false);
+            }
+        }
+
 
         // Chat
         chat.render(g, player);
@@ -274,6 +307,11 @@ public class World extends PlayState implements GameMap {
                     var ha = h.getHitbox();
                     g.setStroke(javafx.scene.paint.Color.RED);
                     g.strokeRect(ha.getMinX(), ha.getMinY(), ha.getWidth(), ha.getHeight());
+                }
+                if(e instanceof Pickupable p && p.getPickUpArea() != null) {
+                    var pu = p.getPickUpArea();
+                    g.setStroke(javafx.scene.paint.Color.YELLOW);
+                    g.strokeRect(pu.getMinX(), pu.getMinY(), pu.getWidth(), pu.getHeight());
                 }
                 if(e instanceof Interactable i && i.getInteractArea() != null) {
                     var ia = i.getInteractArea();

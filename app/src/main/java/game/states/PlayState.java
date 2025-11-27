@@ -4,7 +4,7 @@ import engine.core.Game;
 import engine.core.GameState;
 import engine.map.TiledMap;
 import game.states.play.World;
-import game.states.play.ui.Chat;
+import game.ui.Chat;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 
