@@ -24,6 +24,7 @@ import game.entities.decorations.rocks.RockMedium;
 import game.entities.decorations.trees.TreeTall;
 import game.entities.decorations.trees.TreeWide;
 import game.entities.items.Stick;
+import game.entities.items.Stone;
 import game.tiles.GrassTile;
 import game.tiles.SandTile;
 import game.tiles.Tile;
@@ -47,13 +48,6 @@ public class World implements GameMap {
 
     private final Orc orc;
 
-    private final Item stick0;
-    private final Item stick1;
-    private final Item stick2;
-    private final Item stick3;
-    private final Item stick4;
-    private final Item stick5;
-
     private final InteractButton interactButton;
     private final Camera camera;
     
@@ -72,37 +66,32 @@ public class World implements GameMap {
 
         // Camera
         camera = new Camera(game.getCanvas().getWidth(), game.getCanvas().getHeight());
-
+        camera.setZoom(2.5);
+        
         // Player and actors
         orc = new Orc(game, this, game.getOriginalTileSize(), game.getOriginalTileSize());
-
-        //Items
-        stick0 = new Stick(game, game.getTileSize() * 250, game.getTileSize() * 252);
-        stick1 = new Stick(game, game.getTileSize() * 249, game.getTileSize() * 252);
-        stick2 = new Stick(game, game.getTileSize() * 252, game.getTileSize() * 249);
-        stick3 = new Stick(game, game.getTileSize() * 252, game.getTileSize() * 251);
-        stick4 = new Stick(game, game.getTileSize() * 250, game.getTileSize() * 251);
-        stick5 = new Stick(game, game.getTileSize() * 251, game.getTileSize() * 253);
-
-        
+    
         // Load actors from map
         entities.add(player);
         entities.add(orc);
-        entities.add(stick0);
-        entities.add(stick1);
-        entities.add(stick2);
-        entities.add(stick3);
-        entities.add(stick4);
-        entities.add(stick5);
+
 
         // Load ui
         interactButton = new InteractButton(player.getX(),player.getY());
 
-        camera.setZoom(3);
+        
         System.out.println("World initialized with " + entities.size() + " entities.");
     }
 
     public void update(double delta) {
+        //Zoom and cameraupdate
+        double scroll = game.getMouseInput().consumeScrollDeltaY();
+        if (scroll != 0) {
+            if (scroll > 0) camera.zoomIn(0.1);
+            else camera.zoomOut(0.1);
+        }
+        camera.update(player.getX(),player.getY(),game.getTileSize(),map.getWidth(),(map.getHeight()));
+        
         //Interfaces
         collidables.clear();
         hittables.clear();
@@ -121,9 +110,6 @@ public class World implements GameMap {
         Collision.handleInteractions(interactables, player);
      
 
-        //Camera update
-        camera.update(player.getX(),player.getY(),game.getTileSize(),map.getWidth(),(map.getHeight()));
-        
     }
 
     public void render(GraphicsContext g) {
@@ -282,6 +268,16 @@ public class World implements GameMap {
             var durs   = m.getAnimatedDurations().getOrDefault(mo.gid, List.of(Integer.MAX_VALUE));
             double s = g.getTileSize() / m.getTileWidth();
             return new Bonfire(g, frames, durs, mo.x * s, (mo.y - mo.h) * s, mo.w * s, mo.h * s);
+        });
+
+        registry.register("stick", (g, mo, img, m) -> {
+            double s = g.getTileSize() / m.getTileWidth();
+            return new Stick(g, mo.x * s, (mo.y - mo.h) * s);
+        });
+
+        registry.register("stone", (g, mo, img, m) -> {
+            double s = g.getTileSize() / m.getTileWidth();
+            return new Stone(g, mo.x * s, (mo.y - mo.h) * s);
         });
     }
 

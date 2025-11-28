@@ -3,10 +3,10 @@ package game.states.menu;
 import engine.core.Game;
 import engine.input.MouseInput;
 import engine.ui.Button;
-import game.states.MenuState;
 import game.states.PlayState;
 import game.states.menu.ui.Logo;
 import javafx.application.Platform;
+import javafx.scene.ImageCursor;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
@@ -39,9 +39,9 @@ public class MainMenu {
         background = new Image(getClass().getResource("/assets/ui/mountains_background.png").toExternalForm());
 
 
-        play = new Button(playButton, 3, canvasWidth / 2, canvasHeight / 2 + 200,33,16);     // x, y example positions
-        options = new Button(optionsButton, 3, (int)(canvasWidth / 2), canvasHeight / 2 + 300,33,16);
-        quit = new Button(quitButton, 3,(int)(canvasWidth / 2), canvasHeight / 2 + 400,33,16);
+        play = new Button(playButton, 3, canvasWidth / 2, canvasHeight / 2 + 200,33,16, 2);     // x, y example positions
+        options = new Button(optionsButton, 3, (int)(canvasWidth / 2), canvasHeight / 2 + 300,33,16,2);
+        quit = new Button(quitButton, 3,(int)(canvasWidth / 2), canvasHeight / 2 + 400,33,16,2);
         // logo = new Logo(logoSpriteSheet, 0, 3, (int)(canvasWidth / 2), canvasHeight / 2 - 500);
     }
 
@@ -64,46 +64,50 @@ public class MainMenu {
     
     }
 
-    private void handleMouse() {
-        MouseInput mouse = game.getMouseInput();
-        double mx = mouse.getMouseX();
-        double my = mouse.getMouseY();
+private boolean lastHoverState = false;
 
-        // --- PLAY ---
-        if (play.isHovered(mx, my)) {
-            play.setCurrentFrame(mouse.isMousePressed() ? 2 : 1);
-            if (mouse.consumeRelease()) {
-                play.setCurrentFrame(1);
-                game.changeState(new PlayState(game)); 
-            }
-        } else {
-            play.setCurrentFrame(0);
-        }
+private void handleMouse() {
+    MouseInput mouse = game.getMouseInput();
+    double mx = mouse.getMouseX();
+    double my = mouse.getMouseY();
 
-        // --- OPTIONS ---
-        if (options.isHovered(mx, my)) {
-            options.setCurrentFrame(mouse.isMousePressed() ? 2 : 1);
-            if (mouse.consumeRelease()) {
-                options.setCurrentFrame(1);
-                // TODO: add options logic later
-            }
-        } else {
-            options.setCurrentFrame(0);
-        }
+    // Determine hover BEFORE mutating anything
+    boolean hoveringPlay = play.isHovered(mx, my);
+    boolean hoveringOptions = options.isHovered(mx, my);
+    boolean hoveringQuit = quit.isHovered(mx, my);
 
-        // --- QUIT ---
-        if (quit.isHovered(mx, my)) {
-            quit.setCurrentFrame(mouse.isMousePressed() ? 2 : 1);
-            if (mouse.consumeRelease()) {
-                quit.setCurrentFrame(1);
-                Platform.runLater(() -> {
-                    game.stopRunning();
-                    game.getStage().close();
-                    System.out.println("Quit clicked!");
-                });
-            }
-        } else {
-            quit.setCurrentFrame(0);
-        }
+    boolean hovering = hoveringPlay || hoveringOptions || hoveringQuit;
+
+    // Update cursor only when needed
+    if (hovering != lastHoverState) {
+        game.getScene().setCursor(hovering ? game.getClickCursor() : game.getDefaultCursor());
+        lastHoverState = hovering;
     }
+
+    // PLAY logic
+    if (hoveringPlay) {
+        play.setCurrentImage(mouse.isMousePressed() ? 2 : 1);
+        if (mouse.consumeRelease()) game.changeState(new PlayState(game));
+    } else play.setCurrentImage(0);
+
+    // OPTIONS logic
+    if (hoveringOptions) {
+        options.setCurrentImage(mouse.isMousePressed() ? 2 : 1);
+        if (mouse.consumeRelease()) {
+            // TODO
+        }
+    } else options.setCurrentImage(0);
+
+    // QUIT logic
+    if (hoveringQuit) {
+        quit.setCurrentImage(mouse.isMousePressed() ? 2 : 1);
+        if (mouse.consumeRelease()) {
+            Platform.runLater(() -> {
+                game.stopRunning();
+                game.getStage().close();
+            });
+        }
+    } else quit.setCurrentImage(0);
+}
+
 }

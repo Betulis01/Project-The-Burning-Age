@@ -5,7 +5,6 @@ import engine.input.KeyboardInput;
 import engine.input.MouseInput;
 import engine.physics.Collision;
 import engine.render.Camera;
-import game.Inventory;
 import game.entities.Actor;
 import game.entities.Entity;
 import game.entities.behavior.Collidable;
@@ -15,6 +14,7 @@ import game.entities.behavior.Moveable;
 import game.entities.behavior.Swimmer;
 import game.states.play.GameMap;
 import game.tiles.Tile;
+import game.ui.inventory.Inventory;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -61,6 +61,7 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
 
     @Override
     public void update(double delta) {
+        handleInput();
         move(delta);
         updateAnimation(delta);
         setAnimationDirection();

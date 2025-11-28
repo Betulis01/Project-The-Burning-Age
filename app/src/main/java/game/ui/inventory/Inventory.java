@@ -1,4 +1,4 @@
-package game;
+package game.ui.inventory;
 
 import game.entities.Item;
 

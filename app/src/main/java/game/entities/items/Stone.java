@@ -7,16 +7,16 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import utilities.SpriteSheet;
 
-public class Stick extends Item {
+public class Stone extends Item {
 
-    public Stick(Game game, double x, double y) {
+    public Stone(Game game, double x, double y) {
         super(game,x,y, 16, 16);
 
-        SpriteSheet sheet = new SpriteSheet(new Image(getClass().getResource("/assets/items/Stick.png").toExternalForm()),16, 16);        
+        SpriteSheet sheet = new SpriteSheet(new Image(getClass().getResource("/assets/items/stone.png").toExternalForm()),16, 16);        
         this.image = sheet.getFrame(0, 0);
         this.maxStack = 4;
-        setSolidArea(0,height*0.55,width,height*0.1);
-        setPickUpArea(0, 0, width, height);
+        setSolidArea(width*0.45,height*0.5,width*0.2,height*0.1);
+        setPickUpArea(width*0.45, height*0.5, width*0.2, height*0.2);
     }
 
     @Override

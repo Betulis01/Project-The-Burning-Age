@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="500" height="500" tilewidth="32" tileheight="32" infinite="0" nextlayerid="3" nextobjectid="65">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="500" height="500" tilewidth="32" tileheight="32" infinite="0" nextlayerid="3" nextobjectid="113">
  <editorsettings>
   <export target="world.tmj" format="json"/>
  </editorsettings>
@@ -10,6 +10,8 @@
  <tileset firstgid="61" source="../assets/decor/trees/treeTall.tsx"/>
  <tileset firstgid="65" source="../assets/decor/rocks/rockMedium.tsx"/>
  <tileset firstgid="66" source="../assets/decor/other/bonfire.tsx"/>
+ <tileset firstgid="69" source="../assets/items/stick.tsx"/>
+ <tileset firstgid="70" source="../assets/items/stone.tsx"/>
  <layer id="1" name="Tile Layer 1" width="500" height="500">
   <data encoding="csv">
 29,29,29,29,29,29,29,29,29,29,29,28,29,29,29,29,29,29,29,29,29,29,29,29,28,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,
@@ -515,23 +517,42 @@
 </data>
  </layer>
  <objectgroup id="2" name="Object Layer 1">
-  <object id="44" type="treeTall" gid="62" x="7987.75" y="7986.42" width="64" height="64"/>
   <object id="45" type="rockMedium" gid="65" x="7918.42" y="8109.42" width="32" height="32"/>
-  <object id="47" type="treeWide" gid="58" x="7803.42" y="8083.42" width="64" height="64"/>
-  <object id="48" type="treeWide" gid="59" x="7781.42" y="8109.58" width="64" height="64"/>
-  <object id="49" type="treeTall" gid="64" x="7986.92" y="8012.92" width="64" height="64"/>
-  <object id="50" type="treeTall" gid="63" x="8008.92" y="8002.92" width="64" height="64"/>
-  <object id="51" type="treeWide" gid="59" x="7728.67" y="8039.33" width="64" height="64"/>
-  <object id="52" type="treeWide" gid="58" x="7752" y="8065.33" width="64" height="64"/>
-  <object id="53" type="treeWide" gid="57" x="7848.67" y="8123.33" width="64" height="64"/>
-  <object id="54" type="treeWide" gid="57" x="7734" y="8110.67" width="64" height="64"/>
-  <object id="55" type="treeWide" gid="59" x="7790" y="8145.33" width="64" height="64"/>
-  <object id="57" type="treeWide" gid="57" x="7737.33" y="8162.67" width="64" height="64"/>
-  <object id="58" type="treeWide" gid="57" x="7777.33" y="8010" width="64" height="64"/>
-  <object id="59" type="treeWide" gid="57" x="7779.33" y="8190" width="64" height="64"/>
   <object id="60" type="rockMedium" gid="65" x="7780" y="8185.33" width="32" height="32"/>
-  <object id="61" type="treeTall" gid="64" x="7792" y="8037.33" width="64" height="64"/>
-  <object id="62" type="treeTall" gid="63" x="7728" y="7980" width="64" height="64"/>
-  <object id="63" type="bonfire" gid="66" x="8036.5" y="8190.5" width="32" height="32"/>
+  <object id="63" type="bonfire" gid="66" x="7894" y="8194.5" width="32" height="32"/>
+  <object id="65" type="stick" gid="69" x="7856" y="8132" width="16" height="16"/>
+  <object id="66" type="stick" gid="69" x="8026.5" y="8008.5" width="16" height="16"/>
+  <object id="67" type="stick" gid="69" x="7820" y="8186" width="16" height="16"/>
+  <object id="68" type="stick" gid="69" x="7763" y="7974.5" width="16" height="16"/>
+  <object id="69" type="stick" gid="69" x="7751" y="8182.5" width="16" height="16"/>
+  <object id="70" type="stick" gid="69" x="7742.5" y="8050" width="16" height="16"/>
+  <object id="71" type="stick" gid="69" x="8052" y="8085" width="16" height="16"/>
+  <object id="72" type="stone" gid="70" x="7877" y="7991.5" width="16" height="16"/>
+  <object id="73" type="stone" gid="70" x="7967" y="7963.5" width="16" height="16"/>
+  <object id="74" type="stone" gid="70" x="7799" y="7925.5" width="16" height="16"/>
+  <object id="75" type="stone" gid="70" x="8069.5" y="8169.5" width="16" height="16"/>
+  <object id="76" type="stone" gid="70" x="7862.5" y="8180" width="16" height="16"/>
+  <object id="77" type="stone" gid="70" x="7842.5" y="8147" width="16" height="16"/>
+  <object id="78" type="stone" gid="70" x="7777" y="8104.5" width="16" height="16"/>
+  <object id="79" type="stone" gid="70" x="8021" y="8014" width="16" height="16"/>
+  <object id="80" type="stone" gid="70" x="8081.5" y="8068" width="16" height="16"/>
+  <object id="81" type="stone" gid="70" x="7930.5" y="8043" width="16" height="16"/>
+  <object id="82" type="stone" gid="70" x="7799" y="7924" width="16" height="16"/>
+  <object id="83" type="stone" gid="70" x="7877" y="7993" width="16" height="16"/>
+  <object id="87" type="treeWide" gid="57" x="7747.5" y="7962.5" width="64" height="64"/>
+  <object id="90" type="treeWide" gid="57" x="7811.5" y="8089" width="64" height="64"/>
+  <object id="95" type="treeWide" gid="57" x="7738.5" y="8166.5" width="64" height="64"/>
+  <object id="96" type="treeWide" gid="59" x="7753" y="8033" width="64" height="64"/>
+  <object id="97" type="treeWide" gid="57" x="7792.5" y="8041.5" width="64" height="64"/>
+  <object id="98" type="treeWide" gid="57" x="7782.5" y="8155" width="64" height="64"/>
+  <object id="99" type="treeWide" gid="58" x="7729.5" y="8113.5" width="64" height="64"/>
+  <object id="100" type="treeWide" gid="59" x="7763" y="8083.5" width="64" height="64"/>
+  <object id="101" type="treeWide" gid="59" x="7837" y="7936" width="64" height="64"/>
+  <object id="102" type="treeTall" gid="63" x="7719.5" y="7945" width="64" height="64"/>
+  <object id="108" type="treeTall" gid="64" x="8011" y="7943.5" width="64" height="64"/>
+  <object id="109" type="treeTall" gid="62" x="8037.5" y="7981.5" width="64" height="64"/>
+  <object id="110" type="treeTall" gid="63" x="7721" y="8020.5" width="64" height="64"/>
+  <object id="111" type="treeTall" gid="64" x="7782.5" y="7990.5" width="64" height="64"/>
+  <object id="112" type="treeTall" gid="64" x="7987" y="8000" width="64" height="64"/>
  </objectgroup>
 </map>

@@ -11,10 +11,9 @@ public abstract class UIElement {
     protected boolean visible = true;
 
     protected Image image;
-    protected Image[] frames;
+    protected Image[] images;
     protected int frameCount;
-    protected int currentFrame;
-
+    protected int currentImage;
 
 
     protected UIElement(Image image, int frameCount, double x, double y, int width, int height) {
@@ -25,20 +24,19 @@ public abstract class UIElement {
         this.width = width;
         this.height = height;
 
-        loadFrames();
+        loadImages();
     }
 
-    protected void loadFrames() {
+    protected void loadImages() {
         if (image == null || frameCount <= 0) {
-            frames = new Image[]{ image };
+            images = new Image[]{ image };
             return;
         }
 
-        frames = new Image[frameCount];
+        images = new Image[frameCount];
         PixelReader reader = image.getPixelReader();
-
         for (int i = 0; i < frameCount; i++) {
-            frames[i] = new WritableImage(reader,i * width,0,width,height);
+            images[i] = new WritableImage(reader,i * width,0,width,height);
         }
     }
 
@@ -47,8 +45,8 @@ public abstract class UIElement {
 
     public boolean isVisible() { return visible; }
     public void setVisible(boolean visible) { this.visible = visible; }
-    public void setCurrentFrame(int currentFrame) {
-        this.currentFrame = currentFrame;
+    public void setCurrentImage(int currentImage) {
+        this.currentImage = currentImage;
     }
 
 }

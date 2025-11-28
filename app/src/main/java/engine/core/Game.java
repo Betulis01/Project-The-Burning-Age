@@ -7,9 +7,11 @@ import engine.map.EntityRegistry;
 import engine.map.TiledMap;
 import engine.map.TiledMapLoader;
 import engine.physics.Collision;
+import javafx.scene.ImageCursor;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import utilities.Utility;
@@ -42,9 +44,12 @@ public class Game {
     private GameState currentState;
     private boolean running = true;
 
-    //Font
+    //Font and Cursor
     private final Font pixelFont = Font.loadFont(getClass().getResourceAsStream("/ui/fonts/minecraft_font.ttf"), 0);
-
+    private final Image defaultCursorImage = new Image(getClass().getResource("/assets/ui/cursor/cursor.png").toExternalForm());
+    private ImageCursor defaultCursor;
+    private final Image clickCursorImage = new Image(getClass().getResource("/assets/ui/cursor/click.png").toExternalForm());
+    private ImageCursor clickCursor;
 
     public Game(Engine engine, Stage stage, double width, double height) {
         this.engine = engine;
@@ -61,7 +66,7 @@ public class Game {
         g.setImageSmoothing(false);
         stage.setScene(scene);
         stage.show();
-
+        
         System.out.println("Game initialized at " + screenWidth + "x" + screenHeight + " (scale=" + String.format("%.2f", deviceScale) + "). Tilesize: " + tileSize);
 
         initSystems();
@@ -87,6 +92,10 @@ public class Game {
         registry = new EntityRegistry();
         collision = new Collision();
         utility = new Utility();
+
+        //cursor
+        loadCursors();
+        scene.setCursor(defaultCursor);
     }
 
     private void initInputs() {
@@ -122,6 +131,12 @@ public class Game {
     // --- setters ---
     public void setTiledMap(TiledMap map) {
         this.tiledMap = map;
+    }
+
+    //Cursor
+    public void loadCursors() {
+        defaultCursor = new ImageCursor(defaultCursorImage, 0,0);
+        clickCursor = new ImageCursor(clickCursorImage,0,0);
     }
 
     // --- getters ---
@@ -161,5 +176,13 @@ public class Game {
 
     public double getScale() {
         return scale;
+    }
+
+    public ImageCursor getClickCursor() {
+        return clickCursor;
+    }
+
+    public ImageCursor getDefaultCursor() {
+        return defaultCursor;
     }
 }
