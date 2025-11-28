@@ -48,16 +48,15 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
     private boolean interaction = false;
 
 
-    public Player(Game game, GameMap map) {
+    public Player(Game game) {
         super(game, game.getTileSize()*247, game.getTileSize()*250, game.getTileSize(), game.getTileSize(), 100);
-        this.map = map;
         this.spriteSheet = new Image(getClass().getResource("/assets/actors/player/orc8.png").toExternalForm());
         this.pixels = 32;
-        this.inventory = new Inventory(8);
+        this.inventory = new Inventory(2,3);
         loadAnimations();
         setSolidArea(pixels * 0.42,pixels * 0.85,pixels * 0.15,pixels * 0.08);
         setHitbox(0.3,0.5);
-        setInteractArea(2, 2);
+        setInteractArea(1, 1);
     }
 
     @Override
@@ -316,6 +315,9 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
         return inventory;
     }
 
+    public void setMap(GameMap map) {
+        this.map = map;
+    }
     
 
 }

@@ -11,12 +11,9 @@ public class MenuState extends GameState {
 
     public MenuState(Game game) {
         super(game);
+        this.state = new MainMenu(game); 
     }
 
-    @Override
-    public void load() {
-    state = new MainMenu(game); 
-    }
 
     @Override
     public void update(double delta) {

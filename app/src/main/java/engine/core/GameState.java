@@ -13,7 +13,6 @@ public abstract class GameState {
 
     protected abstract void update(double delta);
     protected abstract void render(GraphicsContext gc);
-    public abstract void load();
     public abstract void unload();
 
     // synchronized entry points used by the engine

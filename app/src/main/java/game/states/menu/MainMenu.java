@@ -11,7 +11,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
 
-public class MainMenu extends MenuState{
+public class MainMenu {
     private final Game game;
     private final double canvasWidth;
     private final double canvasHeight;
@@ -27,7 +27,6 @@ public class MainMenu extends MenuState{
     private Logo logo;
 
     public MainMenu(Game game) {
-        super(game);
         this.game = game;
 
         canvasWidth = game.getCanvas().getWidth();
@@ -47,7 +46,6 @@ public class MainMenu extends MenuState{
     }
 
     // Called from MenuState.update()
-    @Override
     public void update(double delta) {
         // Example: handle animations, hover states, etc.
         // If nothing dynamic yet, leave empty.
@@ -55,7 +53,6 @@ public class MainMenu extends MenuState{
     }
 
     // Called from MenuState.render(gc)
-    @Override
     public void render(GraphicsContext g) {
         g.clearRect(0, 0, canvasWidth, canvasHeight); // clears previous frame
         //g.drawImage(background, 0, 0, canvasWidth, canvasHeight);

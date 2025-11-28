@@ -5,9 +5,11 @@ import game.entities.behavior.Collidable;
 import game.entities.behavior.Pickupable;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 
 public abstract class Item extends Entity implements Collidable, Pickupable {
     protected int maxStack;
+    protected Image image;
     
     //Frame
     protected int frameIndex = 0;
@@ -85,7 +87,11 @@ public abstract class Item extends Entity implements Collidable, Pickupable {
         return y; // fallback
     } 
 
-        public int getMaxStack() {
+    public int getMaxStack() {
         return maxStack;
+    }
+
+    public Image getImage() {
+        return image;
     }
 }

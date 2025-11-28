@@ -11,7 +11,6 @@ import engine.map.EntityRegistry;
 import engine.map.TiledMap;
 import engine.physics.Collision;
 import engine.render.Camera;
-import game.Inventory;
 import game.entities.Entity;
 import game.entities.Item;
 import game.entities.actors.Player;
@@ -25,7 +24,6 @@ import game.entities.decorations.rocks.RockMedium;
 import game.entities.decorations.trees.TreeTall;
 import game.entities.decorations.trees.TreeWide;
 import game.entities.items.Stick;
-import game.states.PlayState;
 import game.tiles.GrassTile;
 import game.tiles.SandTile;
 import game.tiles.Tile;
@@ -35,8 +33,10 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 
-public class World extends PlayState implements GameMap {
+public class World implements GameMap {
+    private final Game game;
     private final TiledMap map;
+    private final Player player;
     private final EntityRegistry registry;
     private final Tile[][] tiles;
     private final List<Entity> entities = new ArrayList<>();
@@ -45,18 +45,23 @@ public class World extends PlayState implements GameMap {
     private final List<Interactable> interactables = new ArrayList<>();
     private final List<Pickupable> pickupables = new ArrayList<>();
 
-    private final Player player;
     private final Orc orc;
 
-    private final Item stick;
+    private final Item stick0;
+    private final Item stick1;
+    private final Item stick2;
+    private final Item stick3;
+    private final Item stick4;
+    private final Item stick5;
 
     private final InteractButton interactButton;
     private final Camera camera;
     
 
-    public World(Game game, TiledMap map) {
-        super(game);
+    public World(Game game, TiledMap map, Player player) {
+        this.game = game;
         this.map = map;
+        this.player = player;
 
         // Load map
         this.tiles = new Tile[map.getHeight()][map.getWidth()];
@@ -69,16 +74,26 @@ public class World extends PlayState implements GameMap {
         camera = new Camera(game.getCanvas().getWidth(), game.getCanvas().getHeight());
 
         // Player and actors
-        player = new Player(game, this);
         orc = new Orc(game, this, game.getOriginalTileSize(), game.getOriginalTileSize());
 
         //Items
-        stick = new Stick(game, game.getTileSize() * 252, game.getTileSize() * 252);
+        stick0 = new Stick(game, game.getTileSize() * 250, game.getTileSize() * 252);
+        stick1 = new Stick(game, game.getTileSize() * 249, game.getTileSize() * 252);
+        stick2 = new Stick(game, game.getTileSize() * 252, game.getTileSize() * 249);
+        stick3 = new Stick(game, game.getTileSize() * 252, game.getTileSize() * 251);
+        stick4 = new Stick(game, game.getTileSize() * 250, game.getTileSize() * 251);
+        stick5 = new Stick(game, game.getTileSize() * 251, game.getTileSize() * 253);
+
         
         // Load actors from map
         entities.add(player);
         entities.add(orc);
-        entities.add(stick);
+        entities.add(stick0);
+        entities.add(stick1);
+        entities.add(stick2);
+        entities.add(stick3);
+        entities.add(stick4);
+        entities.add(stick5);
 
         // Load ui
         interactButton = new InteractButton(player.getX(),player.getY());
@@ -87,17 +102,7 @@ public class World extends PlayState implements GameMap {
         System.out.println("World initialized with " + entities.size() + " entities.");
     }
 
-    @Override
     public void update(double delta) {
-        //Chat
-        var keys = game.getKeyboardInput();
-        if (keys.consumeKey(KeyCode.ENTER)) chat.toggle();
-        if (chat.isActive()) {
-            chat.update(keys);
-        } else {
-            player.handleInput();
-        }
-
         //Interfaces
         collidables.clear();
         hittables.clear();
@@ -121,7 +126,6 @@ public class World extends PlayState implements GameMap {
         
     }
 
-    @Override
     public void render(GraphicsContext g) {
         g.save();
         camera.apply(g);
@@ -210,17 +214,11 @@ public class World extends PlayState implements GameMap {
             }
 
             if (overlapping) {
-                interactButton.setPosition(player.getX() + interactButton.getWidth() / 2,
-                                        player.getY() - 20);
+                interactButton.setPosition(player.getX() + interactButton.getWidth() / 2,player.getY() - 20);
                 interactButton.render(g);
-            } else {
-                player.setInteraction(false);
             }
         }
 
-
-        // Chat
-        chat.render(g, player);
         
         //Debug
         debug(g);

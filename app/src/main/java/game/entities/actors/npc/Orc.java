@@ -15,6 +15,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import utilities.Utility;
 
 public class Orc extends Actor implements Collidable, Damageable, Moveable, Hittable {
@@ -70,7 +71,7 @@ public class Orc extends Actor implements Collidable, Damageable, Moveable, Hitt
 
         if (interaction) {
             String text = "Who you be?";
-            g.setFont(game.getPixelFont());
+            g.setFont(Font.font(game.getPixelFont().getFamily(), 6)); 
             g.setFill(Color.web("#b07409"));
             double textWidth = text.length() * 3; 
             double drawX = x + (width/2) - (textWidth/2);

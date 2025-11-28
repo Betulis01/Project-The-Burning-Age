@@ -6,6 +6,7 @@ import game.entities.actors.Player;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 
 public class Chat {
@@ -52,7 +53,7 @@ public class Chat {
         double px = player.getX();
         double py = player.getY();
         if (!lastMessage.isEmpty()) {
-            g.setFont(game.getPixelFont());
+            g.setFont(Font.font(game.getPixelFont().getFamily(), 6)); 
             g.setFill(Color.web("#b07409"));
             double textWidth = lastMessage.length() * 3; 
             g.fillText(lastMessage, px + (player.getWidth()/2) - (textWidth/2), py - 10);
@@ -60,7 +61,7 @@ public class Chat {
 
         if (active) {
             g.setFill(Color.WHITE);
-            g.setFont(game.getPixelFont());
+            g.setFont(Font.font(game.getPixelFont().getFamily(), 6)); 
             g.fillText("> " + input, px, py + player.getHeight() + 10);
         }
     }

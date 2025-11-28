@@ -43,7 +43,7 @@ public class Game {
     private boolean running = true;
 
     //Font
-    private Font pixelFont = Font.loadFont(getClass().getResourceAsStream("/ui/fonts/minecraft_font.ttf"), 6);
+    private final Font pixelFont = Font.loadFont(getClass().getResourceAsStream("/ui/fonts/minecraft_font.ttf"), 0);
 
 
     public Game(Engine engine, Stage stage, double width, double height) {
@@ -116,7 +116,7 @@ public class Game {
     public void changeState(GameState newState) {
         if (currentState != null) currentState.unload();
         currentState = newState;
-        currentState.load();
+        //currentState.load();
     }
 
     // --- setters ---

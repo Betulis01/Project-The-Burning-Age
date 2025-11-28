@@ -8,14 +8,13 @@ import javafx.scene.image.Image;
 import utilities.SpriteSheet;
 
 public class Stick extends Item {
-    private Image image;
 
     public Stick(Game game, double x, double y) {
         super(game,x,y, 16, 16);
 
         SpriteSheet sheet = new SpriteSheet(new Image(getClass().getResource("/assets/items/Stick.png").toExternalForm()),16, 16);        
         this.image = sheet.getFrame(0, 0);
-        this.maxStack = 20;
+        this.maxStack = 4;
         setSolidArea(0,height*0.6,width,height*0.2);
         setPickUpArea(0, 0, width, height);
     }

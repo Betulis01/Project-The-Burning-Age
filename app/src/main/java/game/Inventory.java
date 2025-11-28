@@ -3,30 +3,66 @@ package game;
 import game.entities.Item;
 
 public class Inventory {
-    private InventorySlot[] slots;
-    
-    public Inventory(int capacity) {
-        slots = new InventorySlot[capacity];
-        for (int i = 0; i < capacity; i++) {
-            slots[i] = new InventorySlot();
+    private final InventorySlot[][] slots;
+    private final int rows;
+    private final int cols;
+
+    private boolean visible = false;
+
+    public Inventory(int rows, int cols) {
+        this.rows = rows;
+        this.cols = cols;
+        this.slots = new InventorySlot[rows][cols];
+
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                slots[r][c] = new InventorySlot();
+            }
         }
     }
 
     public boolean addItem(Item item) {
         // 1. Try stacking
-        for (InventorySlot slot : slots) {
-            if(slot.canStack(item)) {
-                slot.addItem(item);
-                return true;
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                if (slots[r][c].canStack(item)) {
+                    slots[r][c].addItem(item);
+                    return true;
+                }
             }
         }
-        // 2. Add to empty slot
-        for (InventorySlot slot : slots) {
-            if (slot.isEmpty()) {
-                slot.addItem(item);
-                return true;
+        // 2. Fill empty slot
+        for (int r = 0; r < rows; r++) {
+            for (int c = 0; c < cols; c++) {
+                if (slots[r][c].isEmpty()) {
+                    slots[r][c].addItem(item);
+                    return true;
+                }
             }
         }
-        return false; // Inventory full
+        return false; // full
+    }
+
+    public int getCols() { return cols; }
+    public int getRows() { return rows; }
+
+    public InventorySlot getSlot(int r, int c) {
+        return slots[r][c];
+    }
+
+    public Item getItem(int r, int c) {
+        return slots[r][c].getItem();
+    }
+
+    public int getCount(int r, int c) {
+        return slots[r][c].getCount();
+    }
+
+    public boolean isVisible() {
+        return visible;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 }
