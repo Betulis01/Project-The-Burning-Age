@@ -32,17 +32,17 @@ public class MainMenu {
         canvasWidth = game.getCanvas().getWidth();
         canvasHeight = game.getCanvas().getHeight();
 
-        playButton = new Image(getClass().getResource("/assets/ui/play_button.png").toExternalForm());
-        optionsButton = new Image(getClass().getResource("/assets/ui/options_button.png").toExternalForm());
-        quitButton = new Image(getClass().getResource("/assets/ui/quit_button.png").toExternalForm());
+        playButton = new Image(getClass().getResource("/assets/ui/button/play_button.png").toExternalForm());
+        optionsButton = new Image(getClass().getResource("/assets/ui/button/options_button.png").toExternalForm());
+        quitButton = new Image(getClass().getResource("/assets/ui/button/quit_button.png").toExternalForm());
         logoSpriteSheet = new Image(getClass().getResource("/assets/ui/dragon_logo.png").toExternalForm());
-        background = new Image(getClass().getResource("/assets/ui/mountains_background.png").toExternalForm());
+        background = new Image(getClass().getResource("/assets/ui/background/background_big.jpg").toExternalForm());
 
 
         play = new Button(playButton, 3, canvasWidth / 2, canvasHeight / 2 + 200,33,16, 2);     // x, y example positions
         options = new Button(optionsButton, 3, (int)(canvasWidth / 2), canvasHeight / 2 + 300,33,16,2);
         quit = new Button(quitButton, 3,(int)(canvasWidth / 2), canvasHeight / 2 + 400,33,16,2);
-        // logo = new Logo(logoSpriteSheet, 0, 3, (int)(canvasWidth / 2), canvasHeight / 2 - 500);
+        logo = new Logo(logoSpriteSheet, 0, 3, (int)(canvasWidth / 2), canvasHeight / 2 - 500);
     }
 
     // Called from MenuState.update()
@@ -55,12 +55,12 @@ public class MainMenu {
     // Called from MenuState.render(gc)
     public void render(GraphicsContext g) {
         g.clearRect(0, 0, canvasWidth, canvasHeight); // clears previous frame
-        //g.drawImage(background, 0, 0, canvasWidth, canvasHeight);
+        g.drawImage(background, 0, 0, canvasWidth, canvasHeight);
         
         play.render(g);
         options.render(g);
         quit.render(g);
-        //logo.render(g);
+        logo.render(g);
     
     }
 

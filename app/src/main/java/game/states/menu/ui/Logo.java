@@ -12,13 +12,15 @@ public class Logo {
     private static final int logoHeight = 120 * 3;
 
     private final Image[] frames;
+    private final Image spriteSheet;
     private int currentFrame;
     private final double x, y;
 
     public Logo(Image spriteSheet, int rowIndex, int frameCount, double x, double y) {
         this.x = x;
         this.y = y;
-        
+        this.spriteSheet = new Image(getClass().getResource("/assets/ui/dragon_logo.png").toExternalForm());
+  
         frames = new Image[frameCount];
         PixelReader reader = spriteSheet.getPixelReader();
         for (int i = 0; i < frameCount; i++) { 
@@ -26,7 +28,7 @@ public class Logo {
         }
     }
 
-    public void draw(GraphicsContext g) {
+    public void render(GraphicsContext g) {
         for (int i = 0; i < frames.length; i++) {
             g.drawImage(frames[i], x - (logoWidth / 2), y, logoWidth, logoHeight);
         }     

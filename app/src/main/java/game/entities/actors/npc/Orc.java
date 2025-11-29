@@ -41,7 +41,7 @@ public class Orc extends Actor implements Collidable, Damageable, Moveable, Hitt
     private boolean interaction = false;
 
     public Orc(Game game, GameMap map, double x, double y) {
-        super(game, game.getTileSize()*250, game.getTileSize()*250, 32, 32, 100);
+        super(game, game.getTileSize()*245, game.getTileSize()*251, 32, 32, 100);
         this.map = map;
         this.spriteSheet = new Image(getClass().getResource("/assets/actors/npc/orc.png").toExternalForm());
         this.pixels = 32;
@@ -139,7 +139,13 @@ public class Orc extends Actor implements Collidable, Damageable, Moveable, Hitt
                 x += moveSpeed;
                 moving = true;
             }
-        }    
+        }  
+
+        // Clamp inside world bounds
+        double maxX = (map.getWidth()  * game.getTileSize()) - width;
+        double maxY = (map.getHeight() * game.getTileSize()) - height;
+        x = Math.max(0, Math.min(x, maxX));
+        y = Math.max(0, Math.min(y, maxY));  
     }
 
 

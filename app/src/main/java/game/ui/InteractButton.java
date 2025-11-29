@@ -21,7 +21,7 @@ public class InteractButton {
     public InteractButton(double x, double y) {
         this.x = x;
         this.y = y;
-        this.spriteSheet = new Image(getClass().getResource("/assets/ui/e_button.png").toExternalForm());
+        this.spriteSheet = new Image(getClass().getResource("/assets/ui/button/e_button.png").toExternalForm());
         loadAnimations();
     }
 

@@ -27,7 +27,7 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
     private GameMap map;
     private final Image spriteSheet;
     private Image[][] animations;
-    private int pixels; 
+    private int pixels = 32; 
     private Inventory inventory;
 
 
@@ -49,9 +49,8 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
 
 
     public Player(Game game) {
-        super(game, game.getTileSize()*247, game.getTileSize()*250, game.getTileSize(), game.getTileSize(), 100);
+        super(game, game.getTileSize()*251, game.getTileSize()*251, game.getTileSize(), game.getTileSize(), 100);
         this.spriteSheet = new Image(getClass().getResource("/assets/actors/player/orc8.png").toExternalForm());
-        this.pixels = 32;
         this.inventory = new Inventory(2,3);
         loadAnimations();
         setSolidArea(pixels * 0.42,pixels * 0.85,pixels * 0.15,pixels * 0.08);
@@ -71,36 +70,56 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
     public void render(GraphicsContext g) {
         Image frame = animations[aniIndex][direction.ordinal()];
         int tileSize = (int) game.getTileSize();
-        int tileX = (int) ((x + tileSize / 2) / tileSize);
-        int tileY = (int) ((y + tileSize) / tileSize);
 
-        Tile t = map.getTile(tileX, tileY);
+        // Feet position tiles
+        int tileX = (int)((x + width / 2) / tileSize);
+        int tileY = (int)((y + height)    / tileSize);
 
-        // Swimming Y-offset from the Swimmer interface
-        double offsetY = computeSwimOffsetY(map, x, y, tileSize);
+        // Clamp to valid bounds
+        tileX = Math.max(0, Math.min(tileX, map.getWidth()  - 1));
+        tileY = Math.max(0, Math.min(tileY, map.getHeight() - 1));
 
-        // --- normal draw if not in swimmable tile ---
-        if (!(t instanceof game.tiles.behaviors.Swimmable)) {
+        // Current + below tile (safe clamped)
+        Tile current = map.getTile(tileX, tileY);
+        int belowY = Math.min(tileY + 1, map.getHeight() - 1);
+        Tile below = map.getTile(tileX, belowY);
+
+        // Swimming offset logic
+        boolean inWater  = current instanceof game.tiles.behaviors.Swimmable;
+        boolean waterEnd = !(below instanceof game.tiles.behaviors.Swimmable);
+
+        double offsetY = 0;
+        if (inWater) {
+            offsetY = -5;  // adjust height if inside water
+
+            // If standing at water edge, push slightly more up for realism
+            if (waterEnd) {
+                offsetY = -8;
+            }
+        }
+
+        // Not in water → draw normally
+        if (!inWater) {
             g.drawImage(frame, x, y + offsetY, width, height);
             return;
         }
 
-        // --- if swimmable: clip bottom 70% of player sprite ---
+        // In water → clip lower portion
         g.save();
 
-        // Draw invisible "water surface" rectangle that hides sprite height
         double visibleHeight = height * 0.48;
-        double clipY = y + offsetY;  // top of visible portion
+        double clipY = y + offsetY;
+
         g.beginPath();
         g.rect(x, clipY, width, visibleHeight);
         g.closePath();
         g.clip();
 
-        // Draw the player
         g.drawImage(frame, x, y + offsetY, width, height);
 
         g.restore();
     }
+
 
     @Override
     public void handleInput() {
