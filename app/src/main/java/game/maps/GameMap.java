@@ -1,4 +1,4 @@
-package game.states.play;
+package game.maps;
 
 import java.util.List;
 

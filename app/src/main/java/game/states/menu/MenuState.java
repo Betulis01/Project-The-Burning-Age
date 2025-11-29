@@ -1,8 +1,7 @@
-package game.states;
+package game.states.menu;
 
 import engine.core.Game;
 import engine.core.GameState;
-import game.states.menu.MainMenu;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 

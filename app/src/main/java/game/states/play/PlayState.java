@@ -1,10 +1,11 @@
-package game.states;
+package game.states.play;
 
 import engine.core.Game;
 import engine.core.GameState;
 import engine.map.TiledMap;
-import game.entities.actors.Player;
-import game.states.play.World;
+import game.entities.actors.player.Player;
+import game.maps.world.World;
+import game.states.menu.MenuState;
 import game.ui.Chat;
 import game.ui.inventory.InventoryUI;
 import javafx.scene.canvas.GraphicsContext;
@@ -21,8 +22,8 @@ public class PlayState extends GameState {
 
     public PlayState(Game game) {
         super(game);
-        canvasWidth = game.getCanvas().getWidth();
-        canvasHeight = game.getCanvas().getHeight();
+        this.canvasWidth = game.getCanvas().getWidth();
+        this.canvasHeight = game.getCanvas().getHeight();
         
         // 1. Create player 
         player = new Player(game);

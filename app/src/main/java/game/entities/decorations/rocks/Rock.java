@@ -3,7 +3,7 @@ package game.entities.decorations.rocks;
 import java.util.List;
 
 import engine.core.Game;
-import game.entities.Decoration;
+import game.entities.decorations.Decoration;
 import javafx.scene.image.Image;
 
 public class Rock extends Decoration {

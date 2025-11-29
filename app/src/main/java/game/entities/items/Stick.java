@@ -1,7 +1,6 @@
 package game.entities.items;
 
 import engine.core.Game;
-import game.entities.Item;
 import game.entities.behavior.Pickupable;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;

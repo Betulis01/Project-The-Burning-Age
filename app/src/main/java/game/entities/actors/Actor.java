@@ -1,6 +1,7 @@
-package game.entities;
+package game.entities.actors;
 
 import engine.core.Game;
+import game.entities.Entity;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 

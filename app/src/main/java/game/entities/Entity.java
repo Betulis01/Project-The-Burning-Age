@@ -29,7 +29,9 @@ public abstract class Entity implements Renderable, Updateable, Interactable {
     }
 
     @Override
-    public void update(double delta) { }
+    public void update(double delta) {
+    
+    }
 
     @Override
     public void render(GraphicsContext g) {
@@ -42,7 +44,7 @@ public abstract class Entity implements Renderable, Updateable, Interactable {
         interactBaseWidth  = (int) (width * interactWidth);
         interactBaseHeight = (int) (height * interactHeight);
         interactOffsetX = (width - interactBaseWidth) / 2;
-        interactOffsetY = (height - interactBaseHeight) / 2;
+        interactOffsetY = (height - interactBaseHeight);
         updateInteractArea();
     }
 

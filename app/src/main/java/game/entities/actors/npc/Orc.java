@@ -2,13 +2,13 @@ package game.entities.actors.npc;
 
 import engine.core.Game;
 import engine.physics.Collision;
-import game.entities.Actor;
 import game.entities.Entity;
+import game.entities.actors.Actor;
 import game.entities.behavior.Collidable;
 import game.entities.behavior.Damageable;
 import game.entities.behavior.Hittable;
 import game.entities.behavior.Moveable;
-import game.states.play.GameMap;
+import game.maps.GameMap;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -41,7 +41,7 @@ public class Orc extends Actor implements Collidable, Damageable, Moveable, Hitt
     private boolean interaction = false;
 
     public Orc(Game game, GameMap map, double x, double y) {
-        super(game, game.getTileSize()*245, game.getTileSize()*251, 32, 32, 100);
+        super(game, game.getTileSize()*248, game.getTileSize()*251, 32, 32, 100);
         this.map = map;
         this.spriteSheet = new Image(getClass().getResource("/assets/actors/npc/orc.png").toExternalForm());
         this.pixels = 32;

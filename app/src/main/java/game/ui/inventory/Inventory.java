@@ -1,6 +1,6 @@
 package game.ui.inventory;
 
-import game.entities.Item;
+import game.entities.items.Item;
 
 public class Inventory {
     private final InventorySlot[][] slots;
@@ -42,6 +42,15 @@ public class Inventory {
         }
         return false; // full
     }
+
+    public void clearSlot(int r, int c) {
+    slots[r][c].clear();
+    }
+
+    public void setItem(int r, int c, Item item, int count) {
+        slots[r][c].set(item, count);
+    }
+
 
     public int getCols() { return cols; }
     public int getRows() { return rows; }

@@ -1,18 +1,18 @@
-package game.entities.actors;
+package game.entities.actors.player;
 
 import engine.core.Game;
 import engine.input.KeyboardInput;
 import engine.input.MouseInput;
 import engine.physics.Collision;
 import engine.render.Camera;
-import game.entities.Actor;
 import game.entities.Entity;
+import game.entities.actors.Actor;
 import game.entities.behavior.Collidable;
 import game.entities.behavior.Controllable;
 import game.entities.behavior.Hittable;
 import game.entities.behavior.Moveable;
 import game.entities.behavior.Swimmer;
-import game.states.play.GameMap;
+import game.maps.GameMap;
 import game.tiles.Tile;
 import game.ui.inventory.Inventory;
 import javafx.geometry.Rectangle2D;
@@ -51,7 +51,7 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
     public Player(Game game) {
         super(game, game.getTileSize()*251, game.getTileSize()*251, game.getTileSize(), game.getTileSize(), 100);
         this.spriteSheet = new Image(getClass().getResource("/assets/actors/player/orc8.png").toExternalForm());
-        this.inventory = new Inventory(2,3);
+        this.inventory = new Inventory(4,4);
         loadAnimations();
         setSolidArea(pixels * 0.42,pixels * 0.85,pixels * 0.15,pixels * 0.08);
         setHitbox(0.3,0.5);

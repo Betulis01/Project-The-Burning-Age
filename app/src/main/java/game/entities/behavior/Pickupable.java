@@ -1,6 +1,6 @@
 package game.entities.behavior;
 
-import game.entities.Item;
+import game.entities.items.Item;
 import javafx.geometry.Rectangle2D;
 
 public interface Pickupable {

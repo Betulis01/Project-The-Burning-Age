@@ -3,10 +3,9 @@ package game.states.menu;
 import engine.core.Game;
 import engine.input.MouseInput;
 import engine.ui.Button;
-import game.states.PlayState;
 import game.states.menu.ui.Logo;
+import game.states.play.PlayState;
 import javafx.application.Platform;
-import javafx.scene.ImageCursor;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 

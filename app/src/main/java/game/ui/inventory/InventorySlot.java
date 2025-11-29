@@ -1,6 +1,6 @@
 package game.ui.inventory;
 
-import game.entities.Item;
+import game.entities.items.Item;
 
 public class InventorySlot {
     private Item item;
@@ -40,6 +40,17 @@ public class InventorySlot {
             count = 0;
         }
     }
+
+    public void clear() {
+        item = null;
+        count = 0;
+    }
+
+    public void set(Item item, int count) {
+        this.item = item;
+        this.count = count;
+    }
+
 
     public Item getItem() {
         return item;

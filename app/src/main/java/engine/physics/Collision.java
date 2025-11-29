@@ -8,7 +8,7 @@ import game.entities.behavior.Hittable;
 import game.entities.behavior.Interactable;
 import game.entities.behavior.Pickupable;
 import game.entities.behavior.Swimmer;
-import game.states.play.GameMap;
+import game.maps.GameMap;
 import game.tiles.Tile;
 import game.tiles.behaviors.Swimmable;
 import javafx.geometry.Rectangle2D;

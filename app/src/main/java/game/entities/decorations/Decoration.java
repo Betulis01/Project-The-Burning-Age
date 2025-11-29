@@ -1,8 +1,9 @@
-package game.entities;
+package game.entities.decorations;
 
 import java.util.List;
 
 import engine.core.Game;
+import game.entities.Entity;
 import game.entities.behavior.Collidable;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;

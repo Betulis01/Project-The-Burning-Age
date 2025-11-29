@@ -1,6 +1,6 @@
 package game.entities.behavior;
 
-import game.states.play.GameMap;
+import game.maps.GameMap;
 import game.tiles.Tile;
 import game.tiles.behaviors.Swimmable;
 

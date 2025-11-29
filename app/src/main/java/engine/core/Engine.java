@@ -2,7 +2,7 @@ package engine.core;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import game.states.MenuState;
+import game.states.menu.MenuState;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;

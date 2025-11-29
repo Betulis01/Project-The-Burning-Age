@@ -2,7 +2,7 @@ package game.ui;
 
 import engine.core.Game;
 import engine.input.KeyboardInput;
-import game.entities.actors.Player;
+import game.entities.actors.player.Player;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;

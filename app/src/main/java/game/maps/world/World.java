@@ -1,4 +1,4 @@
-package game.states.play;
+package game.maps.world;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -12,9 +12,8 @@ import engine.map.TiledMap;
 import engine.physics.Collision;
 import engine.render.Camera;
 import game.entities.Entity;
-import game.entities.Item;
-import game.entities.actors.Player;
 import game.entities.actors.npc.Orc;
+import game.entities.actors.player.Player;
 import game.entities.behavior.Collidable;
 import game.entities.behavior.Hittable;
 import game.entities.behavior.Interactable;
@@ -23,8 +22,10 @@ import game.entities.decorations.other.Bonfire;
 import game.entities.decorations.rocks.RockMedium;
 import game.entities.decorations.trees.TreeTall;
 import game.entities.decorations.trees.TreeWide;
+import game.entities.items.Item;
 import game.entities.items.Stick;
 import game.entities.items.Stone;
+import game.maps.GameMap;
 import game.tiles.GrassTile;
 import game.tiles.SandTile;
 import game.tiles.Tile;

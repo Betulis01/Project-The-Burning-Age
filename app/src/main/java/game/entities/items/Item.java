@@ -1,6 +1,7 @@
-package game.entities;
+package game.entities.items;
 
 import engine.core.Game;
+import game.entities.Entity;
 import game.entities.behavior.Collidable;
 import game.entities.behavior.Pickupable;
 import javafx.geometry.Rectangle2D;

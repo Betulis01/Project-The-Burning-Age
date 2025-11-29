@@ -1,7 +1,7 @@
 package game.ui.inventory;
 
 import engine.core.Game;
-import game.entities.Item;
+import game.entities.items.Item;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
