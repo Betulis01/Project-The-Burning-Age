@@ -2,13 +2,13 @@ package game.entities.items;
 
 import engine.core.Game;
 import game.entities.Entity;
-import game.entities.behavior.Collidable;
 import game.entities.behavior.Pickupable;
+import game.entities.behavior.collidable.Collidable;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-public abstract class Item extends Entity implements Collidable, Pickupable {
+public abstract class Item extends Entity implements Pickupable {
     protected int maxStack;
     protected Image image;
     
@@ -28,7 +28,7 @@ public abstract class Item extends Entity implements Collidable, Pickupable {
 
 
     public Item(Game game, double x, double y, double width, double height) {
-        super(game, x, y, width, height);
+        super(game);
     }
 
     @Override
@@ -43,7 +43,6 @@ public abstract class Item extends Entity implements Collidable, Pickupable {
             g.drawImage(image, x, y, width, height);
     }
 
-    
     public void setPickUpArea(double offsetX, double offsetY, double width, double height) {
         pickUpOffsetX = offsetX;
         pickUpOffsetY = offsetY;
@@ -55,7 +54,6 @@ public abstract class Item extends Entity implements Collidable, Pickupable {
     public void updatePickUpArea() {
         pickUpArea = new Rectangle2D(x + pickUpOffsetX * game.getScale(), y + pickUpOffsetY * game.getScale(), pickUpBaseWidth * game.getScale(),pickUpBaseHeight * game.getScale());
     }
-
 
     @Override
     public Rectangle2D getPickUpArea() {

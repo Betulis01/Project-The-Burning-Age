@@ -35,7 +35,7 @@ public class MainMenu {
         optionsButton = new Image(getClass().getResource("/assets/ui/button/options_button.png").toExternalForm());
         quitButton = new Image(getClass().getResource("/assets/ui/button/quit_button.png").toExternalForm());
         logoSpriteSheet = new Image(getClass().getResource("/assets/ui/dragon_logo.png").toExternalForm());
-        background = new Image(getClass().getResource("/assets/ui/background/background_big.jpg").toExternalForm());
+        background = new Image(getClass().getResource("/assets/ui/background/Moais.gif").toExternalForm());
 
 
         play = new Button(playButton, 3, canvasWidth / 2, canvasHeight / 2 + 200,33,16, 2);     // x, y example positions

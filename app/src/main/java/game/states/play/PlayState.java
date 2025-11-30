@@ -26,11 +26,12 @@ public class PlayState extends GameState {
         this.canvasHeight = game.getCanvas().getHeight();
         
         // 1. Create player 
-        player = new Player(game);
+        player = new Player(game, game.getTileSize()*251, game.getTileSize()*251, game.getTileSize(), game.getTileSize(), 100);
         inventoryUI = new InventoryUI(game, player.getInventory());
+        System.out.println(player.getX() + "," + player.getY());
 
         // 2. Load map
-        var worldData = game.getTiledLoader().load("/maps/world.tmj");
+        var worldData = game.getTiledLoader().load("/maps/moai.tmj");
         TiledMap worldMap = new TiledMap(worldData);
 
         // 3. Create world with player
@@ -118,5 +119,8 @@ public class PlayState extends GameState {
 
     public Chat getChat() {
         return chat;
+    }
+    public Player getPlayer() {
+        return player;
     }
 }

@@ -4,32 +4,38 @@ import engine.core.Game;
 import game.entities.behavior.Interactable;
 import game.entities.behavior.Renderable;
 import game.entities.behavior.Updateable;
+import game.entities.behavior.collidable.Collidable;
+import game.entities.behavior.collidable.CollidableComponent;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
-public abstract class Entity implements Renderable, Updateable, Interactable {
+public abstract class Entity implements Renderable, Updateable, Interactable, Collidable {
     protected Game game;
     protected Image image;
     protected double x, y;
     protected double width, height;
 
-    // Solid area
+    //Collidable
+    protected final CollidableComponent collidable;
+
     protected Rectangle2D interactArea;
     protected double interactOffsetX, interactOffsetY;
     protected double interactBaseWidth, interactBaseHeight;
 
 
-    public Entity (Game game, double x, double y, double width, double height) {
+
+
+
+    public Entity (Game game) {
         this.game = game;
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+        this.collidable = new CollidableComponent();
+        collidable.configure(x, y, width, height);
     }
 
     @Override
     public void update(double delta) {
+        collidable.update(x, y, game.getScale());
     
     }
 
@@ -79,6 +85,14 @@ public abstract class Entity implements Renderable, Updateable, Interactable {
     public double getY() { return y; }
     public double getWidth() { return width; }
     public double getHeight() { return height; }
+    @Override
+    public Rectangle2D getSolidArea() {
+        return collidable.getSolidArea();
+    }
 
+    @Override
+    public boolean isSolid() {
+        return collidable.isSolid();
+    }
 
 }

@@ -1,4 +1,4 @@
-package game.entities.behavior;
+package game.entities.behavior.collidable;
 
 import javafx.geometry.Rectangle2D;
 

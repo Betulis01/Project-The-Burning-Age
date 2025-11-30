@@ -4,10 +4,10 @@ import engine.core.Game;
 import engine.physics.Collision;
 import game.entities.Entity;
 import game.entities.actors.Actor;
-import game.entities.behavior.Collidable;
 import game.entities.behavior.Damageable;
 import game.entities.behavior.Hittable;
 import game.entities.behavior.Moveable;
+import game.entities.behavior.collidable.Collidable;
 import game.maps.GameMap;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -18,7 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import utilities.Utility;
 
-public class Orc extends Actor implements Collidable, Damageable, Moveable, Hittable {
+public class Orc extends Actor implements Damageable, Moveable, Hittable {
     private GameMap map;
     private final Image spriteSheet;
     private Image[][] animations;
@@ -40,9 +40,8 @@ public class Orc extends Actor implements Collidable, Damageable, Moveable, Hitt
     //Interaction
     private boolean interaction = false;
 
-    public Orc(Game game, GameMap map, double x, double y) {
-        super(game, game.getTileSize()*248, game.getTileSize()*251, 32, 32, 100);
-        this.map = map;
+    public Orc(Game game, double x, double y, double w, double h, int speed) {
+        super(game);
         this.spriteSheet = new Image(getClass().getResource("/assets/actors/npc/orc.png").toExternalForm());
         this.pixels = 32;
 
@@ -141,11 +140,11 @@ public class Orc extends Actor implements Collidable, Damageable, Moveable, Hitt
             }
         }  
 
-        // Clamp inside world bounds
-        double maxX = (map.getWidth()  * game.getTileSize()) - width;
-        double maxY = (map.getHeight() * game.getTileSize()) - height;
-        x = Math.max(0, Math.min(x, maxX));
-        y = Math.max(0, Math.min(y, maxY));  
+        // // Clamp inside world bounds, Make this a component
+        // double maxX = (map.getWidth()  * game.getTileSize()) - width;
+        // double maxY = (map.getHeight() * game.getTileSize()) - height;
+        // x = Math.max(0, Math.min(x, maxX));
+        // y = Math.max(0, Math.min(y, maxY));  
     }
 
 

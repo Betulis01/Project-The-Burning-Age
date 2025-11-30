@@ -26,9 +26,8 @@ public abstract class Actor extends Entity {
     protected boolean collisionUp, collisionDown, collisionLeft, collisionRight;
 
 
-    public Actor(Game game, double x, double y, double width, double height, double speed) {
-        super(game, x, y, width, height);
-        this.speed = speed;
+    public Actor(Game game) {
+        super(game);
     }
 
     @Override

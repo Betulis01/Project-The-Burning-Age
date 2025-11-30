@@ -14,10 +14,10 @@ import engine.render.Camera;
 import game.entities.Entity;
 import game.entities.actors.npc.Orc;
 import game.entities.actors.player.Player;
-import game.entities.behavior.Collidable;
 import game.entities.behavior.Hittable;
 import game.entities.behavior.Interactable;
 import game.entities.behavior.Pickupable;
+import game.entities.behavior.collidable.Collidable;
 import game.entities.decorations.other.Bonfire;
 import game.entities.decorations.rocks.RockMedium;
 import game.entities.decorations.trees.TreeTall;
@@ -47,7 +47,7 @@ public class World implements GameMap {
     private final List<Interactable> interactables = new ArrayList<>();
     private final List<Pickupable> pickupables = new ArrayList<>();
 
-    private final Orc orc;
+    //private final Orc orc;
 
     private final InteractButton interactButton;
     private final Camera camera;
@@ -70,11 +70,11 @@ public class World implements GameMap {
         camera.setZoom(2.5);
         
         // Player and actors
-        orc = new Orc(game, this, game.getOriginalTileSize(), game.getOriginalTileSize());
+        //orc = new Orc(game, game.getTileSize()*248, game.getTileSize()*251, 32, 32, 100);
     
         // Load actors from map
         entities.add(player);
-        entities.add(orc);
+        //entities.add(orc);
 
 
         // Load ui
@@ -110,7 +110,6 @@ public class World implements GameMap {
         Collision.handlePickUpCollisions(pickupables);
         Collision.handleInteractions(interactables, player);
      
-
     }
 
     public void render(GraphicsContext g) {
@@ -226,13 +225,25 @@ public class World implements GameMap {
         }
     }
 
+
+    //MOAI
     private Tile createTile(int gid, Image img) {
         if (gid <= 0 || img == null) return null;
         if (gid >= 1 && gid <= 36) return new WaterTile(img);
         if (gid >= 37 && gid <= 40) return new GrassTile(img);
-        if (gid >= 41 && gid <= 57) return new SandTile(img);
+        if (gid >= 41) return new SandTile(img);
         return null;
     }
+
+    // //WORLD
+    // private Tile createTile(int gid, Image img) {
+    //     if (gid <= 0 || img == null) return null;
+    //     if (gid >= 1 && gid <= 36) return new WaterTile(img);
+    //     if (gid >= 37 && gid <= 40) return new GrassTile(img);
+    //     if (gid >= 41 && gid <= 57) return new SandTile(img);
+    //     return null;
+    // }
+
 
     private void initializeEntities(TiledMap map) {
         for (TiledMap.MapObject mo : map.getObjects()) {

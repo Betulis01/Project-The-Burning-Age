@@ -4,7 +4,7 @@ import java.util.List;
 
 import engine.core.Game;
 import game.entities.Entity;
-import game.entities.behavior.Collidable;
+import game.entities.behavior.collidable.Collidable;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -22,7 +22,7 @@ public abstract class Decoration extends Entity implements Collidable {
 
 
     public Decoration(Game game, List<Image> frames, List<Integer> durations, double x, double y, double width, double height) {
-        super(game, x, y, width, height);
+        super(game);
         this.frames = frames;
         this.durations = durations;
         if (frames != null && !frames.isEmpty()) {

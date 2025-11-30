@@ -7,11 +7,11 @@ import engine.physics.Collision;
 import engine.render.Camera;
 import game.entities.Entity;
 import game.entities.actors.Actor;
-import game.entities.behavior.Collidable;
 import game.entities.behavior.Controllable;
 import game.entities.behavior.Hittable;
 import game.entities.behavior.Moveable;
 import game.entities.behavior.Swimmer;
+import game.entities.behavior.collidable.Collidable;
 import game.maps.GameMap;
 import game.tiles.Tile;
 import game.ui.inventory.Inventory;
@@ -23,7 +23,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 
-public class Player extends Actor implements Collidable, Hittable, Controllable, Moveable, Swimmer {
+public class Player extends Actor implements Hittable, Controllable, Moveable, Swimmer {
     private GameMap map;
     private final Image spriteSheet;
     private Image[][] animations;
@@ -48,10 +48,16 @@ public class Player extends Actor implements Collidable, Hittable, Controllable,
     private boolean interaction = false;
 
 
-    public Player(Game game) {
-        super(game, game.getTileSize()*251, game.getTileSize()*251, game.getTileSize(), game.getTileSize(), 100);
-        this.spriteSheet = new Image(getClass().getResource("/assets/actors/player/orc8.png").toExternalForm());
-        this.inventory = new Inventory(4,4);
+    public Player(Game game, double x, double y, double w, double h, int speed) {
+        super(game);
+        this.x = x;
+        this.y = y;
+        this.width = w;
+        this.height = h;
+        this.speed = speed;
+        
+        spriteSheet = new Image(getClass().getResource("/assets/actors/player/orc8.png").toExternalForm());
+        inventory = new Inventory(4,4);
         loadAnimations();
         setSolidArea(pixels * 0.42,pixels * 0.85,pixels * 0.15,pixels * 0.08);
         setHitbox(0.3,0.5);

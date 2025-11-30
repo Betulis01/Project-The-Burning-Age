@@ -3,11 +3,11 @@ package engine.physics;
 import java.util.List;
 
 import game.entities.Entity;
-import game.entities.behavior.Collidable;
 import game.entities.behavior.Hittable;
 import game.entities.behavior.Interactable;
 import game.entities.behavior.Pickupable;
 import game.entities.behavior.Swimmer;
+import game.entities.behavior.collidable.Collidable;
 import game.maps.GameMap;
 import game.tiles.Tile;
 import game.tiles.behaviors.Swimmable;

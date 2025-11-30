@@ -10,7 +10,7 @@ public class GreenSlime extends Enemy {
     private Image[] images;
 
     public GreenSlime(Game game, double x, double y, double width, double height, double speed) {
-        super(game, x, y, width, height, speed);
+        super(game);
         this.spriteSheet = new Image(getClass().getResource("/assets/actors/enemy/greenslime.png").toExternalForm());
     }
 
