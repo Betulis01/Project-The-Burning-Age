@@ -59,7 +59,6 @@ public class PlayState extends GameState {
         
     }
 
-
     @Override
     public void render(GraphicsContext g) {
         if (world != null) {
@@ -75,8 +74,6 @@ public class PlayState extends GameState {
         //FPS and UPS
         drawFpsAndUps(g);
     }
-
-        
 
     @Override
     public void unload() {
@@ -114,7 +111,6 @@ public class PlayState extends GameState {
         g.fillText("FPS: " + game.getEngine().getFps(), 20, 40);
         g.fillText("UPS: " + game.getEngine().getUps(), 20, 20);
     }
-
 
     public Chat getChat() {
         return chat;

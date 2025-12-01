@@ -16,6 +16,10 @@ public abstract class Decoration extends Entity {
 
     public Decoration(Game game, List<Image> frames, List<Integer> durations, double x, double y, double width, double height) {
         super(game);
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
         this.frames = frames;
         this.durations = durations;
         if (frames != null && !frames.isEmpty()) {

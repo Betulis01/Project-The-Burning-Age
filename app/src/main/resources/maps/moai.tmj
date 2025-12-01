@@ -519,100 +519,16 @@
          "name":"Object Layer 1",
          "objects":[
                 {
-                 "gid":62,
+                 "gid":65,
                  "height":64,
-                 "id":5,
+                 "id":16,
                  "name":"",
                  "rotation":0,
                  "type":"treeTall",
                  "visible":true,
                  "width":64,
-                 "x":7732,
-                 "y":7701.33333333333
-                }, 
-                {
-                 "gid":63,
-                 "height":64,
-                 "id":6,
-                 "name":"",
-                 "rotation":0,
-                 "type":"treeTall",
-                 "visible":true,
-                 "width":64,
-                 "x":8117.33333333333,
-                 "y":7721.33333333333
-                }, 
-                {
-                 "gid":62,
-                 "height":64,
-                 "id":7,
-                 "name":"",
-                 "rotation":0,
-                 "type":"treeTall",
-                 "visible":true,
-                 "width":64,
-                 "x":7968,
-                 "y":7793.33333333333
-                }, 
-                {
-                 "gid":61,
-                 "height":64,
-                 "id":8,
-                 "name":"",
-                 "rotation":0,
-                 "type":"treeTall",
-                 "visible":true,
-                 "width":64,
-                 "x":7970.66666666667,
-                 "y":8090.66666666667
-                }, 
-                {
-                 "gid":64,
-                 "height":64,
-                 "id":9,
-                 "name":"",
-                 "rotation":0,
-                 "type":"treeTall",
-                 "visible":true,
-                 "width":64,
-                 "x":7726.66666666667,
-                 "y":7925.33333333333
-                }, 
-                {
-                 "gid":62,
-                 "height":64,
-                 "id":10,
-                 "name":"",
-                 "rotation":0,
-                 "type":"treeTall",
-                 "visible":true,
-                 "width":64,
-                 "x":7846.66666666667,
-                 "y":7856
-                }, 
-                {
-                 "gid":61,
-                 "height":64,
-                 "id":11,
-                 "name":"",
-                 "rotation":0,
-                 "type":"treeTall",
-                 "visible":true,
-                 "width":64,
-                 "x":8142.66666666667,
-                 "y":8061.33333333333
-                }, 
-                {
-                 "gid":62,
-                 "height":64,
-                 "id":12,
-                 "name":"",
-                 "rotation":0,
-                 "type":"treeTall",
-                 "visible":true,
-                 "width":64,
-                 "x":8090.66666666667,
-                 "y":7901.33333333333
+                 "x":7945.33333333333,
+                 "y":7902.66666666667
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -621,7 +537,7 @@
          "y":0
         }],
  "nextlayerid":4,
- "nextobjectid":15,
+ "nextobjectid":18,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.11.2",
@@ -641,6 +557,10 @@
         }, 
         {
          "firstgid":61,
+         "source":"..\/assets\/decor\/trees\/moai-treeTall.tsx"
+        }, 
+        {
+         "firstgid":65,
          "source":"..\/assets\/decor\/trees\/moai-treeTall.tsx"
         }],
  "tilewidth":32,

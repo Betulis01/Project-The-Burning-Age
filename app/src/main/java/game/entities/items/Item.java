@@ -20,11 +20,6 @@ public abstract class Item extends Entity implements Pickupable {
     private double pickUpOffsetX, pickUpOffsetY;
     private double pickUpBaseWidth, pickUpBaseHeight;
 
-    // Solid area if needed (for obstacles)
-    protected Rectangle2D solidArea;
-    private double solidOffsetX, solidOffsetY;
-    private double solidBaseWidth, solidBaseHeight;
-
 
     public Item(Game game, double x, double y, double width, double height) {
         super(game);

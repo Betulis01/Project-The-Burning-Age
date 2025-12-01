@@ -13,6 +13,13 @@ public class TreeTall extends Tree implements Collidable {
     public TreeTall(Game game, List<Image> frames, List<Integer> durations,double x, double y, double w, double h) {
         super(game, frames, durations, x, y, w, h);
         this.collision = new CollidableComponent(this,(width-8)/2, (height-6),7, 4);
+        for (Image i : frames) {
+            System.out.println(i);
+        }
+        
+        for (Integer integer : durations) {
+            System.out.println(integer);
+        }
     }
 
     @Override

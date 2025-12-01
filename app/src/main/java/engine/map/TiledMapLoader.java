@@ -281,6 +281,8 @@ public class TiledMapLoader {
         return xml.substring(start, end);
     }
 
+    
+
     private static class Tileset {
         int firstGid;
         Image image;

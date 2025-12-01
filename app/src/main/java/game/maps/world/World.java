@@ -336,15 +336,18 @@ public class World implements GameMap {
     public Player getPlayer() {
         return player;
     }
-
+    
+    @Override
     public Camera getCamera() {
         return camera;
     }
 
+    @Override
     public List<Entity> getEntities() {
         return entities;
     }
 
+    @Override
     public Tile getTile(int x, int y) { return tiles[y][x]; }
 
     @Override
