@@ -1,32 +1,23 @@
 package game.entities.behavior.collidable;
 
+import game.entities.Entity;
 import javafx.geometry.Rectangle2D;
 
-public class CollidableComponent {
-    private Rectangle2D solidArea;
-    private double offsetX, offsetY, baseWidth, baseHeight;
+public class CollidableComponent implements Collidable {
+    private final Entity entity;
+    private double offsetX, offsetY;
+    private double width, height;
 
-    public void configure(double offsetX, double offsetY, double width, double height) {
+    public CollidableComponent(Entity entity, double offsetX, double offsetY, double width, double height) {
+        this.entity = entity;
         this.offsetX = offsetX;
         this.offsetY = offsetY;
-        this.baseWidth = width;
-        this.baseHeight = height;
+        this.width = width;
+        this.height = height;
     }
 
-    public void update(double x, double y, double scale) {
-        solidArea = new Rectangle2D(
-            x + offsetX * scale,
-            y + offsetY * scale,
-            baseWidth * scale,
-            baseHeight * scale
-        );
-    }
-
+    @Override
     public Rectangle2D getSolidArea() {
-        return solidArea;
-    }
-
-    public boolean isSolid() {
-        return true;
+        return new Rectangle2D(entity.getX() + offsetX, entity.getY() + offsetY, width, height);
     }
 }

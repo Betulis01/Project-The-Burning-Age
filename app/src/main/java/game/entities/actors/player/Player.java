@@ -5,13 +5,13 @@ import engine.input.KeyboardInput;
 import engine.input.MouseInput;
 import engine.physics.Collision;
 import engine.render.Camera;
-import game.entities.Entity;
 import game.entities.actors.Actor;
 import game.entities.behavior.Controllable;
 import game.entities.behavior.Hittable;
 import game.entities.behavior.Moveable;
 import game.entities.behavior.Swimmer;
 import game.entities.behavior.collidable.Collidable;
+import game.entities.behavior.collidable.CollidableComponent;
 import game.maps.GameMap;
 import game.tiles.Tile;
 import game.ui.inventory.Inventory;
@@ -23,7 +23,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 
-public class Player extends Actor implements Hittable, Controllable, Moveable, Swimmer {
+public class Player extends Actor implements Collidable, Hittable, Controllable, Moveable, Swimmer {
     private GameMap map;
     private final Image spriteSheet;
     private Image[][] animations;
@@ -47,6 +47,9 @@ public class Player extends Actor implements Hittable, Controllable, Moveable, S
     // Interaction
     private boolean interaction = false;
 
+    //Collision
+    private final CollidableComponent collision;
+
 
     public Player(Game game, double x, double y, double w, double h, int speed) {
         super(game);
@@ -55,13 +58,12 @@ public class Player extends Actor implements Hittable, Controllable, Moveable, S
         this.width = w;
         this.height = h;
         this.speed = speed;
-        
-        spriteSheet = new Image(getClass().getResource("/assets/actors/player/orc8.png").toExternalForm());
-        inventory = new Inventory(4,4);
+        this.collision = new CollidableComponent(this,(width-8)/2, (height-6),7, 4);
+        this.spriteSheet = new Image(getClass().getResource("/assets/actors/player/orc8.png").toExternalForm());
+        this.inventory = new Inventory(4,4);
         loadAnimations();
-        setSolidArea(pixels * 0.42,pixels * 0.85,pixels * 0.15,pixels * 0.08);
-        setHitbox(0.3,0.5);
-        setInteractArea(1, 1);
+
+        
     }
 
     @Override
@@ -147,10 +149,9 @@ public class Player extends Actor implements Hittable, Controllable, Moveable, S
 
     @Override
     public void move(double delta) {
-        updateSolidArea();
         updateHitbox();
-        updateInteractArea();
         moving = false;
+        
 
         boolean horizontal = left ^ right;
         boolean vertical = up ^ down;
@@ -159,37 +160,37 @@ public class Player extends Actor implements Hittable, Controllable, Moveable, S
         double dx = 0;
         double dy = 0;
 
-        Collision collision = game.getCollision();
+        Collision collisionEngine = game.getCollision();
         int tileSize = (int) game.getTileSize();
 
         // Try each direction only if not colliding
         if (up && !down && !collisionUp) {
-            if (!collision.willCollideWithSolid(map, this, 0, -moveSpeed, tileSize, map.getEntities())) {
+            if (!collisionEngine.willCollideWithSolid(map, this, 0.0, -moveSpeed, tileSize, map.getEntities())) {
                 dy -= moveSpeed;
                 moving = true;
             }
         }
         if (down && !up && !collisionDown) {
-            if (!collision.willCollideWithSolid(map, this, 0, moveSpeed, tileSize, map.getEntities())) {
+            if (!collisionEngine.willCollideWithSolid(map, this, 0.0, moveSpeed, tileSize, map.getEntities())) {
                 dy += moveSpeed;
                 moving = true;
             }
         }
         if (left && !right && !collisionLeft) {
-            if (!collision.willCollideWithSolid(map, this, -moveSpeed, 0, tileSize, map.getEntities())) {
+            if (!collisionEngine.willCollideWithSolid(map, this, -moveSpeed, 0.0, tileSize, map.getEntities())) {
                 dx -= moveSpeed;
                 moving = true;
             }
         }
         if (right && !left && !collisionRight) {
-            if (!collision.willCollideWithSolid(map, this, moveSpeed, 0, tileSize, map.getEntities())) {
+            if (!collisionEngine.willCollideWithSolid(map, this, moveSpeed, 0.0, tileSize, map.getEntities())) {
                 dx += moveSpeed;
                 moving = true;
             }
         }
 
         // Apply if no solid collision on the combined move
-        if (!collision.willCollideWithSolid(map, this, dx, dy, tileSize, map.getEntities())) {
+        if (!collisionEngine.willCollideWithSolid(map, this, dx, dy, tileSize, map.getEntities())) {
             x += dx;
             y += dy;
         }
@@ -257,13 +258,7 @@ public class Player extends Actor implements Hittable, Controllable, Moveable, S
         }
     }
 
-    @Override
-    public double getBottomY() {
-        if (solidArea != null) {
-            return solidArea.getMaxY(); // already equals y + height
-        }
-        return y + height; // fallback
-    }
+
 
 
     private void loadAnimations() {
@@ -295,39 +290,6 @@ public class Player extends Actor implements Hittable, Controllable, Moveable, S
     }
 
 
-    // --Collidable--
-    @Override
-    public Rectangle2D getSolidArea() {
-        return solidArea;
-    }
-
-    @Override
-    public boolean isSolid() {
-        return true; // blocks movement for other entities
-    }
-
-    @Override
-    public void onCollide(Collidable other) {
-        // Example reactions:
-        // if (other instanceof Enemy) takeDamage(1);
-        // if (other instanceof ItemDrop) pickup((ItemDrop) other);
-    }   
-
-    // --Interactable--
-    @Override
-    public Rectangle2D getInteractArea() {
-        return interactArea;
-    }
-
-    @Override
-    public void onInteract(Entity other) {
-        
-    }
-
-    @Override
-    public boolean canInteract() {
-        return true;
-    }
 
     public boolean isInteraction() {
         return interaction;
@@ -344,6 +306,17 @@ public class Player extends Actor implements Hittable, Controllable, Moveable, S
     public void setMap(GameMap map) {
         this.map = map;
     }
-    
 
+    @Override
+    public Rectangle2D getSolidArea() {
+        return collision.getSolidArea();
+    }
+
+    @Override
+    public double getBottomY() {
+        if (collision.getSolidArea() != null) {
+            return collision.getSolidArea().getMaxY(); // already equals y + height
+        }
+        return y + height; // fallback
+    }
 }

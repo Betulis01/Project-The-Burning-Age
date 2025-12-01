@@ -4,6 +4,10 @@ import javafx.geometry.Rectangle2D;
 
 public interface Collidable {
     Rectangle2D getSolidArea();
-    boolean isSolid();
+
+    default boolean isSolid() {
+        return true;
+    };
+    
     default void onCollide(Collidable other) {}
 }

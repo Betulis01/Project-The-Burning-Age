@@ -3,7 +3,6 @@ package game.entities.items;
 import engine.core.Game;
 import game.entities.Entity;
 import game.entities.behavior.Pickupable;
-import game.entities.behavior.collidable.Collidable;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
@@ -72,10 +71,7 @@ public abstract class Item extends Entity implements Pickupable {
         solidArea = new Rectangle2D(x + solidOffsetX * game.getScale(),y + solidOffsetY * game.getScale(),solidBaseWidth * game.getScale(),solidBaseHeight * game.getScale());
     }
 
-    @Override
-    public Rectangle2D getSolidArea() {
-        return solidArea;
-    }
+  
 
     // For depth sorting: the Y-coordinate of the “feet” or base
     @Override

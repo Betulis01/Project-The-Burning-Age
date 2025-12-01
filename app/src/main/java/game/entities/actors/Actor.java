@@ -13,11 +13,6 @@ public abstract class Actor extends Entity {
     protected int health;
 
     // Solid area
-    protected Rectangle2D solidArea;
-    protected double solidOffsetX, solidOffsetY;
-    protected double solidBaseWidth, solidBaseHeight;
-
-    // Solid area
     protected Rectangle2D hitbox;
     protected double hitOffsetX, hitOffsetY;
     protected double hitBaseWidth, hitBaseHeight;
@@ -40,24 +35,6 @@ public abstract class Actor extends Entity {
         
     }
 
-    public void setSolidArea(double offsetX, double offsetY, double width, double height) {
-        solidOffsetX = offsetX;
-        solidOffsetY = offsetY;
-        solidBaseWidth = width;
-        solidBaseHeight = height;
-        updateSolidArea();
-    }
-
-    public void updateSolidArea() {
-        double scale = game.getTileSize() / game.getOriginalTileSize();
-        solidArea = new Rectangle2D(
-            x + solidOffsetX * scale,
-            y + solidOffsetY * scale,
-            solidBaseWidth * scale,
-            solidBaseHeight * scale
-        );
-    }
-
     public void setHitbox(double hitWidth, double hitHeight) {
         hitBaseWidth  = (int) (width * hitWidth);
         hitBaseHeight = (int) (height * hitHeight);
@@ -75,18 +52,4 @@ public abstract class Actor extends Entity {
             hitBaseHeight * scale
         );
     }
-
-
-    public Rectangle2D getSolidArea() {
-        return solidArea;
-    }
-
-    // For depth sorting: the Y-coordinate of the “feet” or base
-    @Override
-    public double getBottomY() {
-        if (solidArea != null) {
-            return solidArea.getMinY() + solidArea.getHeight(); // bottom in world coords
-        }
-        return y; // fallback
-    } 
 }

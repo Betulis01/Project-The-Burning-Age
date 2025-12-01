@@ -3,19 +3,29 @@ package game.entities.decorations.trees;
 import java.util.List;
 
 import engine.core.Game;
+import game.entities.behavior.collidable.Collidable;
+import game.entities.behavior.collidable.CollidableComponent;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 
-public class TreeTall extends Tree {
-
+public class TreeTall extends Tree implements Collidable {
+    private final CollidableComponent collision;
     public TreeTall(Game game, List<Image> frames, List<Integer> durations,double x, double y, double w, double h) {
         super(game, frames, durations, x, y, w, h);
-        
-        setSolidArea(
-            (int) (w/game.getDeviceScale()* 0.46),
-            (int) (h/game.getDeviceScale()* 0.86),
-            (int) (w/game.getDeviceScale()* 0.07),
-            (int) (h/game.getDeviceScale()* 0.04)
-        );
+        this.collision = new CollidableComponent(this,(width-8)/2, (height-6),7, 4);
+    }
+
+    @Override
+    public Rectangle2D getSolidArea() {
+        return collision.getSolidArea();
+    }
+
+    @Override
+    public double getBottomY() {
+        if (collision.getSolidArea() != null) {
+            return collision.getSolidArea().getMaxY(); // already equals y + height
+        }
+        return y + height; // fallback
     }
 
 }

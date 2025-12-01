@@ -28,11 +28,7 @@ public class Stick extends Item {
         g.drawImage(image, x, y);
     }
 
-    @Override
-    public boolean isSolid() {
-       return false;
-    }
-
+ 
     @Override
     public void onPickUp(Pickupable other) {
 

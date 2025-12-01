@@ -47,7 +47,7 @@ public class World implements GameMap {
     private final List<Interactable> interactables = new ArrayList<>();
     private final List<Pickupable> pickupables = new ArrayList<>();
 
-    //private final Orc orc;
+    private final Orc orc;
 
     private final InteractButton interactButton;
     private final Camera camera;
@@ -70,11 +70,11 @@ public class World implements GameMap {
         camera.setZoom(2.5);
         
         // Player and actors
-        //orc = new Orc(game, game.getTileSize()*248, game.getTileSize()*251, 32, 32, 100);
+        orc = new Orc(game, this, game.getTileSize()*248, game.getTileSize()*251, 32, 32, 100);
     
         // Load actors from map
         entities.add(player);
-        //entities.add(orc);
+        entities.add(orc);
 
 
         // Load ui
@@ -166,7 +166,7 @@ public class World implements GameMap {
             if (i == player) continue;
             if (!i.canInteract()) continue;
 
-            boolean overlapping = i.getInteractArea().intersects(player.getInteractArea());
+            boolean overlapping = false; //i.getInteractArea().intersects(player.getInteractArea());
 
             if (overlapping) {
                 if (game.getKeyboardInput().consumeKey(KeyCode.E)) {
@@ -190,7 +190,7 @@ public class World implements GameMap {
             Pickupable p = it.next();
             if (!p.canPickUp()) continue;
 
-            boolean overlapping = p.getPickUpArea().intersects(player.getInteractArea());
+            boolean overlapping = false; //p.getPickUpArea().intersects(player.getInteractArea());
 
             if (overlapping && game.getKeyboardInput().consumeKey(KeyCode.E)) {
                 player.getInventory().addItem((Item)p);
@@ -304,7 +304,7 @@ public class World implements GameMap {
         if (game.getKeyboardInput().isKeyPressed(javafx.scene.input.KeyCode.SPACE)) {
             for (Entity e : entities) {
                 g.setLineWidth(0.4);
-                if (e instanceof Collidable c && c.getSolidArea() != null) {
+                if (e instanceof Collidable c) {
                     var sa = c.getSolidArea();
                     g.setStroke(javafx.scene.paint.Color.GREEN);
                     g.strokeRect(sa.getMinX(), sa.getMinY(), sa.getWidth(), sa.getHeight());

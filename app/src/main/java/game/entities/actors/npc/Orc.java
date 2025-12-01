@@ -2,12 +2,12 @@ package game.entities.actors.npc;
 
 import engine.core.Game;
 import engine.physics.Collision;
-import game.entities.Entity;
 import game.entities.actors.Actor;
 import game.entities.behavior.Damageable;
 import game.entities.behavior.Hittable;
 import game.entities.behavior.Moveable;
 import game.entities.behavior.collidable.Collidable;
+import game.entities.behavior.collidable.CollidableComponent;
 import game.maps.GameMap;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
@@ -18,7 +18,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import utilities.Utility;
 
-public class Orc extends Actor implements Damageable, Moveable, Hittable {
+public class Orc extends Actor implements Collidable, Hittable, Damageable, Moveable  {
     private GameMap map;
     private final Image spriteSheet;
     private Image[][] animations;
@@ -40,15 +40,23 @@ public class Orc extends Actor implements Damageable, Moveable, Hittable {
     //Interaction
     private boolean interaction = false;
 
-    public Orc(Game game, double x, double y, double w, double h, int speed) {
+    //Collision
+    private CollidableComponent collision;
+
+    public Orc(Game game, GameMap map, double x, double y, double w, double h, int speed) {
         super(game);
+        this.map = map;
+        this.x = x;
+        this.y = y;
+        this.width = w;
+        this.height = h;
+        this.speed = speed;
         this.spriteSheet = new Image(getClass().getResource("/assets/actors/npc/orc.png").toExternalForm());
         this.pixels = 32;
 
         loadAnimations();
-        setSolidArea(pixels * 0.42,pixels * 0.85,pixels * 0.15,pixels * 0.08);
-        setHitbox(0.3,0.5);
-        setInteractArea(1, 1);
+        this.collision = new CollidableComponent(this,(width-8)/2, (height-6),7, 4);
+        
     }
 
     @Override
@@ -83,9 +91,7 @@ public class Orc extends Actor implements Damageable, Moveable, Hittable {
 
     @Override
     public void move(double delta) {
-        updateSolidArea();
         updateHitbox();
-        updateInteractArea();
         moving = false;
         boolean horizontal = left ^ right;
         boolean vertical = up ^ down;
@@ -110,31 +116,31 @@ public class Orc extends Actor implements Damageable, Moveable, Hittable {
             }
         }
 
-        Collision collision = game.getCollision();
+        Collision collisionEngine = game.getCollision();
         int tileSize = (int) game.getTileSize();
 
         moving = up || down || left || right;
         // Try each direction only if not colliding
         if (up && !down && !collisionUp) {
-            if (!collision.willCollideWithSolid(map, this, 0, -moveSpeed, tileSize, map.getEntities())) {
+            if (!collisionEngine.willCollideWithSolid(map, this, 0, -moveSpeed, tileSize, map.getEntities())) {
                 y -= moveSpeed;
                 moving = true;
             }
         }
         if (down && !up && !collisionDown) {
-            if (!collision.willCollideWithSolid(map, this, 0, moveSpeed, tileSize, map.getEntities())) {
+            if (!collisionEngine.willCollideWithSolid(map, this, 0, moveSpeed, tileSize, map.getEntities())) {
                 y += moveSpeed;
                 moving = true;
             }
         }
         if (left && !right && !collisionLeft) {
-            if (!collision.willCollideWithSolid(map, this, -moveSpeed, 0, tileSize, map.getEntities())) {
+            if (!collisionEngine.willCollideWithSolid(map, this, -moveSpeed, 0, tileSize, map.getEntities())) {
                 x -= moveSpeed;
                 moving = true;
             }
         }
         if (right && !left && !collisionRight) {
-            if (!collision.willCollideWithSolid(map, this, moveSpeed, 0, tileSize, map.getEntities())) {
+            if (!collisionEngine.willCollideWithSolid(map, this, moveSpeed, 0, tileSize, map.getEntities())) {
                 x += moveSpeed;
                 moving = true;
             }
@@ -170,14 +176,7 @@ public class Orc extends Actor implements Damageable, Moveable, Hittable {
         if (right) orcAction = moveRight;
     }
 
-    @Override
-    public double getBottomY() {
-        if (solidArea != null) {
-            return solidArea.getMaxY(); // already equals y + height
-        }
-        return y + height; // fallback
-    }
-
+    
 
     private void loadAnimations() {
         animations = new Image[3][4];
@@ -189,6 +188,19 @@ public class Orc extends Actor implements Damageable, Moveable, Hittable {
         }
     }
 
+    
+    @Override
+    public Rectangle2D getSolidArea() {
+        return collision.getSolidArea();
+    }
+
+    @Override
+    public double getBottomY() {
+        if (collision.getSolidArea() != null) {
+            return collision.getSolidArea().getMaxY(); // already equals y + height
+        }
+        return y + height; // fallback
+    }
 
     @Override
     public void takeDamage(int amount) {
@@ -211,42 +223,6 @@ public class Orc extends Actor implements Damageable, Moveable, Hittable {
        //System.out.println("Orc hit!");
     }
 
-    // --Collidable--
-    @Override
-    public Rectangle2D getSolidArea() {
-        return solidArea;
-    }
-
-    @Override
-    public boolean isSolid() {
-        return true; // blocks movement for other entities
-    }
-
-    @Override
-    public void onCollide(Collidable other) {
-        // Example reactions:
-        // if (other instanceof Enemy) takeDamage(1);
-        // if (other instanceof ItemDrop) pickup((ItemDrop) other);
-       
-    }
-
-    // --Interactable--
-    @Override
-    public Rectangle2D getInteractArea() {
-        return interactArea;
-    }
-
-    @Override
-    public void onInteract(Entity other) {
-        if (interaction) {
-            orcAction = moveDown;
-        }
-    }
-
-    @Override
-    public boolean canInteract() {
-        return true;
-    }
 
     //SETTERS
     public void setInteraction(boolean interaction) {

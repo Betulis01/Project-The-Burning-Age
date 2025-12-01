@@ -31,7 +31,7 @@ public class Game {
     // World + display settings
     private final double originalTileSize = 32;
     private double tileSize;      // scaled size in screen pixels
-    private double scale;
+    private static double scale;
     private double deviceScale;   // screen → logical scale
     private double virtualWidth = 1920;
     private double virtualHeight = 1080;
@@ -174,7 +174,7 @@ public class Game {
         return registry;
     }
 
-    public double getScale() {
+    public static double getScale() {
         return scale;
     }
 

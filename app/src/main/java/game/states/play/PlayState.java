@@ -28,7 +28,6 @@ public class PlayState extends GameState {
         // 1. Create player 
         player = new Player(game, game.getTileSize()*251, game.getTileSize()*251, game.getTileSize(), game.getTileSize(), 100);
         inventoryUI = new InventoryUI(game, player.getInventory());
-        System.out.println(player.getX() + "," + player.getY());
 
         // 2. Load map
         var worldData = game.getTiledLoader().load("/maps/moai.tmj");

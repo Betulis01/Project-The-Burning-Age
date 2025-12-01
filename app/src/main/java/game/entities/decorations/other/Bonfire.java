@@ -3,25 +3,30 @@ package game.entities.decorations.other;
 import java.util.List;
 
 import engine.core.Game;
+import game.entities.behavior.collidable.Collidable;
+import game.entities.behavior.collidable.CollidableComponent;
 import game.entities.decorations.Decoration;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 
-public class Bonfire extends Decoration {
-
+public class Bonfire extends Decoration implements Collidable {
+    private final CollidableComponent collision;
     public Bonfire(Game game, List<Image> frames, List<Integer> durations,
                     double x, double y, double w, double h) {
         super(game, frames, durations, x, y, w, h);
-        
-        setSolidArea(
-            (int) (w/game.getDeviceScale()* 0.35),
-            (int) (h/game.getDeviceScale()* 0.60),
-            (int) (w/game.getDeviceScale()* 0.25),
-            (int) (h/game.getDeviceScale()* 0.04)
-        );
+        this.collision = new CollidableComponent(this,(width-8)/2, (height-6),7, 4);
     }
 
     @Override
-    public boolean isSolid() {
-        return false;
+    public Rectangle2D getSolidArea() {
+        return collision.getSolidArea();
+    }
+
+    @Override
+    public double getBottomY() {
+        if (collision.getSolidArea() != null) {
+            return collision.getSolidArea().getMaxY(); // already equals y + height
+        }
+        return y + height; // fallback
     }
 }

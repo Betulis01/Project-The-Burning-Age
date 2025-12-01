@@ -1,51 +1,34 @@
 package game.entities.actors.enemy;
 
 import engine.core.Game;
-import game.entities.behavior.Hittable;
+import game.entities.behavior.collidable.Collidable;
+import game.entities.behavior.collidable.CollidableComponent;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 
-public class GreenSlime extends Enemy {
+public class GreenSlime extends Enemy implements Collidable {
     private final Image spriteSheet;
     private Image[] images;
+
+    //Collision
+    private final CollidableComponent collision;
 
     public GreenSlime(Game game, double x, double y, double width, double height, double speed) {
         super(game);
         this.spriteSheet = new Image(getClass().getResource("/assets/actors/enemy/greenslime.png").toExternalForm());
-    }
-
-    @Override
-    public boolean isSolid() {
-        return false;
-    }
-
-    @Override
-    public void takeDamage(int amount) {
-        health -= amount;
-        if (health < 0) health = 0;
-    }
-
-    @Override
-    public boolean isDead() {
-        return health <= 0;
-    }
-
-    @Override
-    public void move(double delta) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'move'");
-    }
-
-    @Override
-    public Rectangle2D getHitbox() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getHitbox'");
-    }
-
-    @Override
-    public void onHit(Hittable other) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'onHit'");
+        this.collision = new CollidableComponent(this,0, 0, width, height);
     }
     
+    @Override
+    public Rectangle2D getSolidArea() {
+        return collision.getSolidArea();
+    }
+
+    @Override
+    public double getBottomY() {
+        if (collision.getSolidArea() != null) {
+            return collision.getSolidArea().getMaxY(); // already equals y + height
+        }
+        return y + height; // fallback
+    }
 }

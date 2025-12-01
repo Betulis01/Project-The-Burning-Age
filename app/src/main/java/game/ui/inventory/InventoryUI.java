@@ -33,7 +33,6 @@ public class InventoryUI {
         this.inventory = inventory;
 
         spriteSheet = new Image(getClass().getResource("/assets/ui/inventory/inventorySlot.png").toExternalForm());    
-        System.out.println(spriteSheet.getWidth() + "x" + spriteSheet.getHeight());
 
         loadImages();
     }

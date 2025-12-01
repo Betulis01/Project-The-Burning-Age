@@ -62,10 +62,10 @@ public class Collision {
     public static void handleInteractions(List<? extends Interactable> interactables, Entity other) {
         for (Interactable i : interactables) {
             if (!i.canInteract()) continue;
-            if (i.getInteractArea().intersects(other.getInteractArea())) {
-                i.onInteract(other);
+            // if (i.getInteractArea().intersects(other.getInteractArea())) {
+            //     i.onInteract(other);
 
-            }
+            // }
         }
     }
 
