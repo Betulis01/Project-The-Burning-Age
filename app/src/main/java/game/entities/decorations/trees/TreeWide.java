@@ -9,7 +9,6 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.image.Image;
 
 public class TreeWide extends Tree implements Collidable {
-    //Collision
     private final CollidableComponent collision;
 
     public TreeWide(Game game, List<Image> frames, List<Integer> durations,double x, double y, double w, double h) {
@@ -29,5 +28,4 @@ public class TreeWide extends Tree implements Collidable {
         }
         return y + height; // fallback
     }
-
 }

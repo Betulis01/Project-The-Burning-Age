@@ -2,20 +2,22 @@ package game.entities.items;
 
 import engine.core.Game;
 import game.entities.behavior.Pickupable;
+import game.entities.behavior.collidable.Collidable;
+import game.entities.behavior.collidable.CollidableComponent;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import utilities.SpriteSheet;
 
-public class Stone extends Item {
-
+public class Stone extends Item implements Collidable {
+    private final CollidableComponent collision;
     public Stone(Game game, double x, double y) {
         super(game,x,y, 16, 16);
-
+        
         SpriteSheet sheet = new SpriteSheet(new Image(getClass().getResource("/assets/items/stone.png").toExternalForm()),16, 16);        
         this.image = sheet.getFrame(0, 0);
         this.maxStack = 4;
-        setSolidArea(width*0.45,height*0.5,width*0.2,height*0.1);
-        setPickUpArea(width*0.45, height*0.5, width*0.2, height*0.2);
+        this.collision = new CollidableComponent(this,(width-8)/2, (height-6),7, 4);
     }
 
     @Override
@@ -26,6 +28,19 @@ public class Stone extends Item {
     @Override
     public void render(GraphicsContext g) {
         g.drawImage(image, x, y);
+    }
+
+    @Override
+    public Rectangle2D getSolidArea() {
+        return collision.getSolidArea();
+    }
+
+    @Override
+    public double getBottomY() {
+        if (collision.getSolidArea() != null) {
+            return collision.getSolidArea().getMaxY(); // already equals y + height
+        }
+        return y + height; // fallback
     }
 
 

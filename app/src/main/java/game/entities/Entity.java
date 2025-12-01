@@ -2,7 +2,6 @@ package game.entities;
 
 import engine.core.Game;
 import game.entities.behavior.Renderable;
-import game.entities.behavior.collidable.CollidableComponent;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 
@@ -11,8 +10,6 @@ public abstract class Entity implements Renderable {
     protected Image image;
     protected double x, y;
     protected double width, height;
-
-
 
     public Entity (Game game) {
         this.game = game;

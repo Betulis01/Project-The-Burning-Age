@@ -33,7 +33,6 @@ public abstract class Item extends Entity implements Pickupable {
     @Override
     public void update(double delta) {
         updatePickUpArea();
-        updateSolidArea();
     }
 
     @Override
@@ -58,29 +57,6 @@ public abstract class Item extends Entity implements Pickupable {
     public Rectangle2D getPickUpArea() {
         return pickUpArea;
     }
-
-    public void setSolidArea(double offsetX, double offsetY, double width, double height) {
-        solidOffsetX = offsetX;
-        solidOffsetY = offsetY;
-        solidBaseWidth = width;
-        solidBaseHeight = height;
-        updateSolidArea();
-    }
-
-    public void updateSolidArea() {
-        solidArea = new Rectangle2D(x + solidOffsetX * game.getScale(),y + solidOffsetY * game.getScale(),solidBaseWidth * game.getScale(),solidBaseHeight * game.getScale());
-    }
-
-  
-
-    // For depth sorting: the Y-coordinate of the “feet” or base
-    @Override
-    public double getBottomY() {
-        if (solidArea != null) {
-            return solidArea.getMinY() + solidArea.getHeight(); // bottom in world coords
-        }
-        return y; // fallback
-    } 
 
     public int getMaxStack() {
         return maxStack;
